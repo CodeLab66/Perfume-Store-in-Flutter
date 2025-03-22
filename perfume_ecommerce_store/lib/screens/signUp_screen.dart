@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'signUp_screen.dart';
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+import 'login_screen.dart';
+class SignUpScreen extends StatelessWidget {
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,27 +12,42 @@ class LoginScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 90.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  'assets/images/roselle.png',
-                  //borderRadius: BorderRadius.circular(10),
-                  width: MediaQuery.of(context).size.width * 0.15,
-                  height: MediaQuery.of(context).size.width * 0.15,
-                  fit: BoxFit.contain,
+            const SizedBox(height: 90),
+            // Logo
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                'assets/images/roselle.png',
+                width: MediaQuery.of(context).size.width * 0.15,
+                height: MediaQuery.of(context).size.width * 0.15,
+                fit: BoxFit.contain,
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Create Account Title
+            const Center(
+              child: Text(
+                'Create Account',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontFamily: 'AnticSlab', // Optional: Use a custom font
                 ),
               ),
             ),
             const SizedBox(height: 20),
-            // Login Title
-            const Center(
-              child: Text(
-                'Login',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontFamily: 'AnticSlab', // Optional: Use a custom font
+            // Full Name TextField
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: 'Full Name',
+                  labelStyle: TextStyle(fontSize: 16, color: Colors.grey),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
                 ),
               ),
             ),
@@ -43,6 +58,23 @@ class LoginScreen extends StatelessWidget {
               child: TextField(
                 decoration: InputDecoration(
                   labelText: 'Email Address',
+                  labelStyle: TextStyle(fontSize: 16, color: Colors.grey),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            // Phone Number TextField
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: 'Phone Number',
                   labelStyle: TextStyle(fontSize: 16, color: Colors.grey),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
@@ -71,25 +103,11 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 10),
-            // Forget Password
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  // Add forget password functionality
-                },
-                child: const Text(
-                  'Forget Password',
-                  style: TextStyle(fontSize: 14, color: Colors.black),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            // Login Button
+            const SizedBox(height: 30),
+            // Create Account Button
             ElevatedButton(
               onPressed: () {
-                // Add login functionality
+                // Add signup functionality
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFE8A0A0), // Button color
@@ -99,30 +117,30 @@ class LoginScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 15),
               ),
               child: const Text(
-                'Login',
+                'Create Account',
                 style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
             const SizedBox(height: 20),
-            // Sign Up Text
+            // Already have an account? Login
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "Don't have any account? ",
+                  "Already have an account? ",
                   style: TextStyle(fontSize: 14, color: Colors.black),
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Add sign-up navigation
-              Navigator.push(
+                    Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
               );
             
+                    // Navigate to Login Page
                   },
                   child: const Text(
-                    'Sign Up',
+                    'Login',
                     style: TextStyle(
                       fontSize: 14,
                       color: Color(0xFFE8A0A0),

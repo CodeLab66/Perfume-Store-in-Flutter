@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'signUp_screen.dart';
+import 'ForgetPassword_screen.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -75,10 +76,14 @@ class LoginScreen extends StatelessWidget {
             // Forget Password
             Align(
               alignment: Alignment.centerRight,
-              child: TextButton(
-                onPressed: () {
-                  // Add forget password functionality
-                },
+              child:TextButton(
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const ResetPasswordScreen()),
+    );
+  },
+  
                 child: const Text(
                   'Forget Password',
                   style: TextStyle(fontSize: 14, color: Colors.black),

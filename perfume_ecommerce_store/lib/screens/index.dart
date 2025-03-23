@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'product_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -215,37 +216,54 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.4,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFF1F1),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(imagePath, height: 100, fit: BoxFit.contain),
-          const SizedBox(height: 10),
-          Text(
-            title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
+    return GestureDetector(
+      onTap: () {
+        // Navigate to ProductPageScreen and pass product details
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                (context) => ProductPageScreen(
+                  title: title,
+                  subtitle: subtitle,
+                  price: price,
+                  imagePath: imagePath,
+                ),
           ),
-          Text(
-            subtitle,
-            style: const TextStyle(fontSize: 14, color: Colors.grey),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            price,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+        );
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.4,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFFF1F1),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(imagePath, height: 100, fit: BoxFit.contain),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
-          ),
-        ],
+            Text(
+              subtitle,
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              price,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

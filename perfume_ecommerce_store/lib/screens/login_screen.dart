@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'signUp_screen.dart';
 import 'ForgetPassword_screen.dart';
+import 'index.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -87,7 +88,7 @@ class LoginScreen extends StatelessWidget {
                 },
                 child: const Text(
                   'Forget Password',
-                  style: TextStyle(fontSize: 14, color: Colors.black),
+                  style: TextStyle(fontSize: 14, color: Color(0xFFE8A0A0)),
                 ),
               ),
             ),
@@ -95,7 +96,10 @@ class LoginScreen extends StatelessWidget {
             // Login Button
             ElevatedButton(
               onPressed: () {
-                // Add login functionality
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFE8A0A0), // Button color

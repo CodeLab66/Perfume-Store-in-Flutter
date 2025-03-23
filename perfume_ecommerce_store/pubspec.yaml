@@ -11,8 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
-  # flutter_svg: ^1.0.0
+
 
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -38,6 +37,10 @@ flutter:
   assets:
     - assets/images/roselle.png
     - assets/images/getStarted.png
+    - assets/images/chanel_chance.jpeg
+    - assets/images/dior_sauvage.jpeg
+    - assets/images/ysl_myself.jpeg
+    - assets/images/versace_bright_crystal.jpeg
 
   fonts:
     - family: AnticSlab

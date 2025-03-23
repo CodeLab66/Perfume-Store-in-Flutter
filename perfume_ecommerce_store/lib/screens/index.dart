@@ -1,0 +1,336 @@
+import 'package:flutter/material.dart';
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        title: Image.asset('assets/images/roselle.png', height: 50),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SearchScreen()),
+              );
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SectionHeader(
+              title: 'Best Sellers',
+              subtitle: 'The Best Perfume Ever',
+              navigateTo: BestSellersScreen(),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                ProductCard(
+                  title: 'Dior Sauvage',
+                  subtitle: '50 ml',
+                  price: '89.99\$',
+                  imagePath: 'assets/images/dior_sauvage.jpeg',
+                ),
+                ProductCard(
+                  title: 'Chanel Chance',
+                  subtitle: '50 ml',
+                  price: '119.99\$',
+                  imagePath: 'assets/images/chanel_chance.jpeg',
+                ),
+              ],
+            ),
+            const SizedBox(height: 30),
+            const SectionHeader(
+              title: 'Men',
+              subtitle: 'Make your fragrance your signature',
+              navigateTo: MenScreen(),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                ProductCard(
+                  title: 'Versace Bright Crystal',
+                  subtitle: '50 ml',
+                  price: '50.00\$',
+                  imagePath: 'assets/images/versace_bright_crystal.jpeg',
+                ),
+                ProductCard(
+                  title: 'YSL Myself',
+                  subtitle: '50 ml',
+                  price: '60.00\$',
+                  imagePath: 'assets/images/ysl_myself.jpeg',
+                ),
+              ],
+            ),
+            const SizedBox(height: 30),
+            const SectionHeader(
+              title: 'Women',
+              subtitle: 'Elegance in every drop',
+              navigateTo: WomenScreen(),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                ProductCard(
+                  title: 'Gucci Bloom',
+                  subtitle: '50 ml',
+                  price: '75.00\$',
+                  imagePath: 'assets/images/chanel_chance.jpeg',
+                ),
+                ProductCard(
+                  title: 'Dior J\'adore',
+                  subtitle: '50 ml',
+                  price: '95.00\$',
+                  imagePath: 'assets/images/chanel_chance.jpeg',
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: const Color(0xFFE8A0A0),
+        unselectedItemColor: Colors.grey,
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          } else if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const FavoritesScreen()),
+            );
+          } else if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CartScreen()),
+            );
+          } else if (index == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border),
+            label: 'Favorites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+      ),
+    );
+  }
+}
+
+class SectionHeader extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final Widget navigateTo;
+
+  const SectionHeader({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.navigateTo,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'AnticSlab',
+              ),
+            ),
+            Text(
+              subtitle,
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+          ],
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => navigateTo),
+            );
+          },
+          child: const Text(
+            'See All >',
+            style: TextStyle(
+              color: Color(0xFFE8A0A0),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ProductCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final String price;
+  final String imagePath;
+
+  const ProductCard({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.price,
+    required this.imagePath,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.4,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFF1F1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset(imagePath, height: 100, fit: BoxFit.contain),
+          const SizedBox(height: 10),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            subtitle,
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            price,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SearchScreen extends StatelessWidget {
+  const SearchScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Search')),
+      body: const Center(child: Text('Search Screen')),
+    );
+  }
+}
+
+class BestSellersScreen extends StatelessWidget {
+  const BestSellersScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Best Sellers')),
+      body: const Center(child: Text('Best Sellers Screen')),
+    );
+  }
+}
+
+class MenScreen extends StatelessWidget {
+  const MenScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Men')),
+      body: const Center(child: Text('Men Screen')),
+    );
+  }
+}
+
+class WomenScreen extends StatelessWidget {
+  const WomenScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Women')),
+      body: const Center(child: Text('Women Screen')),
+    );
+  }
+}
+
+class FavoritesScreen extends StatelessWidget {
+  const FavoritesScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Favorites')),
+      body: const Center(child: Text('Favorites Screen')),
+    );
+  }
+}
+
+class CartScreen extends StatelessWidget {
+  const CartScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Cart')),
+      body: const Center(child: Text('Cart Screen')),
+    );
+  }
+}
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Profile')),
+      body: const Center(child: Text('Profile Screen')),
+    );
+  }
+}

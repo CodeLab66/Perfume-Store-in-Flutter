@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+//import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductPageScreen extends StatelessWidget {
-  const ProductPageScreen({super.key});
+  final String title;
+  final String subtitle;
+  final String price;
+  final String imagePath;
+
+  const ProductPageScreen({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.price,
+    required this.imagePath,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +40,12 @@ class ProductPageScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: Image.asset(
-                  'assets/images/chanel_chance.png',
-                  height: 250,
-                  fit: BoxFit.contain,
-                ),
+                child: Image.asset(imagePath, height: 250, fit: BoxFit.contain),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'Chanel Chance',
-                style: TextStyle(
+              Text(
+                title,
+                style: const TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'AnticSlab',
@@ -46,22 +53,20 @@ class ProductPageScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Row(
-                children: [
-                  RatingBarIndicator(
-                    rating: 5.0,
-                    itemBuilder:
-                        (context, index) =>
-                            const Icon(Icons.star, color: Colors.amber),
-                    itemCount: 5,
-                    itemSize: 20.0,
-                  ),
-                  const SizedBox(width: 5),
-                  const Text('5.0', style: TextStyle(fontSize: 16)),
-                ],
+                // children: [
+                //   RatingBarIndicator(
+                //     rating: 5.0,
+                //     itemBuilder: (context, index) => const Icon(Icons.star, color: Colors.amber),
+                //     itemCount: 5,
+                //     itemSize: 20.0,
+                //   ),
+                //   const SizedBox(width: 5),
+                //   const Text('5.0', style: TextStyle(fontSize: 16)),
+                // ],
               ),
               const SizedBox(height: 10),
               const Text(
-                'Chance Eau de Parfum by Chanel is a Chypre Floral fragrance for men. Launched in 2005. Top note is Pink Pepper; middle notes are Jasmine and Iris; base notes are Patchouli, Musk and Vanilla.',
+                'Chance Eau de Parfum by Chanel is a Chypre Floral fragrance for men. Launched in 2005. Top note is Pink Pepper; middle notes are Jasmine and Iris; base notes are Patchouli, Musk, and Vanilla.',
                 style: TextStyle(fontSize: 15, color: Colors.grey),
               ),
               const SizedBox(height: 20),
@@ -82,9 +87,12 @@ class ProductPageScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    '\$119.99',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  Text(
+                    price,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Row(
                     children: [
@@ -109,30 +117,13 @@ class ProductPageScreen extends StatelessWidget {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFE8A0A0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 50,
-                      vertical: 15,
-                    ),
                   ),
-                  child: const Text(
-                    'Add to Cart',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
+                  child: const Text('Add to Cart'),
                 ),
               ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
-        ],
       ),
     );
   }

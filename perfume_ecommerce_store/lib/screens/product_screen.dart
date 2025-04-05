@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class ProductPageScreen extends StatelessWidget {
+class ProductPageScreen extends StatefulWidget {
   final String title;
   final String subtitle;
   final String price;
@@ -16,14 +15,40 @@ class ProductPageScreen extends StatelessWidget {
   });
 
   @override
+  State<ProductPageScreen> createState() => _ProductPageScreenState();
+}
+
+class _ProductPageScreenState extends State<ProductPageScreen> {
+  bool isFavorited = false;
+  static final List<String> favorites = []; // This is the favorites list
+
+  void toggleFavorite() {
+    setState(() {
+      isFavorited = !isFavorited;
+      if (isFavorited) {
+        favorites.add(widget.title); // Add perfume to favorites
+      } else {
+        favorites.remove(widget.title); // Remove if un-favorited
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context); // Back to previous page
+          },
+        ),
+        centerTitle: true, // Center the logo
+        title: Padding(
+          padding: const EdgeInsets.only(top: 4.0),
           child: Image.asset('assets/images/roselle.png', width: 40),
         ),
         actions: [
@@ -40,29 +65,32 @@ class ProductPageScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: Image.asset(imagePath, height: 250, fit: BoxFit.contain),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'AnticSlab',
+                child: Image.asset(
+                  widget.imagePath,
+                  height: 250,
+                  fit: BoxFit.contain,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 20),
               Row(
-                // children: [
-                //   RatingBarIndicator(
-                //     rating: 5.0,
-                //     itemBuilder: (context, index) => const Icon(Icons.star, color: Colors.amber),
-                //     itemCount: 5,
-                //     itemSize: 20.0,
-                //   ),
-                //   const SizedBox(width: 5),
-                //   const Text('5.0', style: TextStyle(fontSize: 16)),
-                // ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.title,
+                    style: const TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'AnticSlab',
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      isFavorited ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorited ? Color(0xFFE8A0A0) : Colors.black,
+                    ),
+                    onPressed: toggleFavorite,
+                  ),
+                ],
               ),
               const SizedBox(height: 10),
               const Text(
@@ -88,7 +116,7 @@ class ProductPageScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    price,
+                    widget.price,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

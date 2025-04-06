@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'product_screen.dart';
 import 'women_section.dart';
+import 'men_section.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -57,7 +58,7 @@ class HomeScreen extends StatelessWidget {
             const SectionHeader(
               title: 'Men',
               subtitle: 'Make your fragrance your signature',
-              navigateTo: MenScreen(),
+              navigateTo: MenCollectionScreen(),
             ),
             const SizedBox(height: 10),
             Row(
@@ -290,18 +291,6 @@ class BestSellersScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Best Sellers')),
       body: const Center(child: Text('Best Sellers Screen')),
-    );
-  }
-}
-
-class MenScreen extends StatelessWidget {
-  const MenScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Men')),
-      body: const Center(child: Text('Men Screen')),
     );
   }
 }

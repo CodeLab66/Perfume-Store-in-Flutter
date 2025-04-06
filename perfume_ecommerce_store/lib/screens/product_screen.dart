@@ -22,6 +22,8 @@ class _ProductPageScreenState extends State<ProductPageScreen> {
   bool isFavorited = false;
   static final List<String> favorites = []; // This is the favorites list
 
+  String selectedSize = '50 ml'; // Default selected size
+
   void toggleFavorite() {
     setState(() {
       isFavorited = !isFavorited;
@@ -30,6 +32,12 @@ class _ProductPageScreenState extends State<ProductPageScreen> {
       } else {
         favorites.remove(widget.title); // Remove if un-favorited
       }
+    });
+  }
+
+  void selectSize(String size) {
+    setState(() {
+      selectedSize = size;
     });
   }
 
@@ -46,7 +54,7 @@ class _ProductPageScreenState extends State<ProductPageScreen> {
             Navigator.pop(context); // Back to previous page
           },
         ),
-        centerTitle: true, // Center the logo
+        centerTitle: true,
         title: Padding(
           padding: const EdgeInsets.only(top: 4.0),
           child: Image.asset('assets/images/roselle.png', width: 40),
@@ -126,14 +134,18 @@ class _ProductPageScreenState extends State<ProductPageScreen> {
                     children: [
                       ChoiceChip(
                         label: const Text('50 ml'),
-                        selected: true,
-                        onSelected: (bool selected) {},
+                        selected: selectedSize == '50 ml',
+                        onSelected: (bool selected) {
+                          if (selected) selectSize('50 ml');
+                        },
                       ),
                       const SizedBox(width: 10),
                       ChoiceChip(
                         label: const Text('100 ml'),
-                        selected: false,
-                        onSelected: (bool selected) {},
+                        selected: selectedSize == '100 ml',
+                        onSelected: (bool selected) {
+                          if (selected) selectSize('100 ml');
+                        },
                       ),
                     ],
                   ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'product_screen.dart';
 import 'women_section.dart';
 import 'men_section.dart';
+import 'bestsellers_section.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -279,18 +280,6 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Search')),
       body: const Center(child: Text('Search Screen')),
-    );
-  }
-}
-
-class BestSellersScreen extends StatelessWidget {
-  const BestSellersScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Best Sellers')),
-      body: const Center(child: Text('Best Sellers Screen')),
     );
   }
 }

@@ -20,7 +20,7 @@ class _WomenCollectionScreenState extends State<WomenCollectionScreen> {
       'title': 'Dior J\'adore',
       'subtitle': '50 ml',
       'price': '95.00\$',
-      'imagePath': 'assets/images/chanel_chance.jpeg',
+      'imagePath': 'assets/images/dior_sauvage.jpeg',
     },
     {
       'title': 'Carolina Herrera',
@@ -32,7 +32,7 @@ class _WomenCollectionScreenState extends State<WomenCollectionScreen> {
       'title': 'Miss Dior',
       'subtitle': '100 ml',
       'price': '89.00\$',
-      'imagePath': 'assets/images/chanel_chance.jpeg',
+      'imagePath': 'assets/images/dior_sauvage.jpeg',
     },
   ];
 
@@ -62,25 +62,19 @@ class _WomenCollectionScreenState extends State<WomenCollectionScreen> {
   }
 
   void applySort() {
-    setState(() {
-      filteredPerfumes.sort((a, b) {
-        switch (selectedSort) {
-          case 'Name A-Z':
-            return a['title']!.compareTo(b['title']!);
-          case 'Name Z-A':
-            return b['title']!.compareTo(a['title']!);
-          case 'Price Low to High':
-            return extractPrice(
-              a['price']!,
-            ).compareTo(extractPrice(b['price']!));
-          case 'Price High to Low':
-            return extractPrice(
-              b['price']!,
-            ).compareTo(extractPrice(a['price']!));
-          default:
-            return 0;
-        }
-      });
+    filteredPerfumes.sort((a, b) {
+      switch (selectedSort) {
+        case 'Name A-Z':
+          return a['title']!.compareTo(b['title']!);
+        case 'Name Z-A':
+          return b['title']!.compareTo(a['title']!);
+        case 'Price Low to High':
+          return extractPrice(a['price']!).compareTo(extractPrice(b['price']!));
+        case 'Price High to Low':
+          return extractPrice(b['price']!).compareTo(extractPrice(a['price']!));
+        default:
+          return 0;
+      }
     });
   }
 
@@ -113,6 +107,39 @@ class _WomenCollectionScreenState extends State<WomenCollectionScreen> {
                         ),
                       )
                       .toList(),
+            ),
+          ),
+    );
+  }
+
+  void showSortDialog() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Sort by'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children:
+                  [
+                    'Name A-Z',
+                    'Name Z-A',
+                    'Price Low to High',
+                    'Price High to Low',
+                  ].map((sortOption) {
+                    return RadioListTile<String>(
+                      title: Text(sortOption),
+                      value: sortOption,
+                      groupValue: selectedSort,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedSort = value!;
+                          Navigator.pop(context);
+                          applySort();
+                        });
+                      },
+                    );
+                  }).toList(),
             ),
           ),
     );
@@ -162,30 +189,22 @@ class _WomenCollectionScreenState extends State<WomenCollectionScreen> {
                 OutlinedButton.icon(
                   onPressed: showFilterDialog,
                   icon: const Icon(Icons.filter_list),
-                  label: Text('Filter (${selectedSize})'),
+                  label: Text('Filter ($selectedSize)'),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.black,
                     side: const BorderSide(color: Colors.grey),
                   ),
                 ),
-                // Sort Dropdown
-                DropdownButton<String>(
-                  value: selectedSort,
-                  items:
-                      [
-                        'Name A-Z',
-                        'Name Z-A',
-                        'Price Low to High',
-                        'Price High to Low',
-                      ].map((sort) {
-                        return DropdownMenuItem(value: sort, child: Text(sort));
-                      }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedSort = value!;
-                      applySort();
-                    });
-                  },
+
+                // Sort Button (as dialog now)
+                OutlinedButton.icon(
+                  onPressed: showSortDialog,
+                  icon: const Icon(Icons.sort),
+                  label: Text('Sort ($selectedSort)'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.black,
+                    side: const BorderSide(color: Colors.grey),
+                  ),
                 ),
               ],
             ),

@@ -6,7 +6,7 @@ class BestSellersScreen extends StatelessWidget {
 
   static final List<Map<String, String>> bestSellers = [
     {
-      'title': 'Chanel Coco Mademoiselle',
+      'title': 'Chanel Coco',
       'subtitle': '50 ml',
       'price': '99.00\$',
       'imagePath': 'assets/images/chanel_chance.jpeg',
@@ -35,18 +35,21 @@ class BestSellersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
+        toolbarHeight: 80,
+        backgroundColor: const Color.fromARGB(169, 243, 160, 160),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         centerTitle: true,
-        title: Image.asset('assets/images/roselle.png', height: 50),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black),
-            onPressed: () {
-              // Future: Navigate to search page
-            },
+        title: Center(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset('assets/images/roselle.png', height: 55),
           ),
-        ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -103,10 +106,13 @@ class BestSellersScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Image.asset(
-                            product['imagePath']!,
-                            height: 100,
-                            fit: BoxFit.contain,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.asset(
+                              product['imagePath']!,
+                              height: 100,
+                              fit: BoxFit.contain,
+                            ),
                           ),
                           const SizedBox(height: 10),
                           Text(

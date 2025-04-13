@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'cart_screen.dart';
+import 'index.dart';
 
 class FavoriteScreen extends StatelessWidget {
   const FavoriteScreen({super.key});
@@ -9,19 +11,19 @@ class FavoriteScreen extends StatelessWidget {
       {
         'title': 'Dior Sauvage',
         'subtitle': '50 ml',
-        'price': '89.99\$',
+        'price': 'Rs. 52,350',
         'imagePath': 'assets/images/dior_sauvage.jpeg',
       },
       {
         'title': 'Chanel Chance',
         'subtitle': '50 ml',
-        'price': '119.99\$',
+        'price': 'Rs. 60,999',
         'imagePath': 'assets/images/chanel_chance.jpeg',
       },
       {
-        'title': 'Dior Sauvage',
-        'subtitle': '50 ml',
-        'price': '89.99\$',
+        'title': 'Dior J\'adore',
+        'subtitle': '100 ml',
+        'price': 'Rs. 65,000',
         'imagePath': 'assets/images/dior_sauvage.jpeg',
       },
     ];
@@ -30,16 +32,14 @@ class FavoriteScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
+        leading: null,
         centerTitle: true,
         title: const Text(
           'Favorites',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 20,
+            fontSize: 25,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -66,7 +66,7 @@ class FavoriteScreen extends StatelessWidget {
                   crossAxisCount: 2,
                   crossAxisSpacing: 15,
                   mainAxisSpacing: 20,
-                  childAspectRatio: 0.65, // Wider and taller cards
+                  childAspectRatio: 0.65,
                 ),
                 itemBuilder: (context, index) {
                   final product = products[index];
@@ -82,11 +82,48 @@ class FavoriteScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: const Color(0xFFE8A0A0),
+        unselectedItemColor: Colors.grey,
+        currentIndex: 1,
+        onTap: (index) {
+          if (index == 0) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          } else if (index == 1) {
+            // Do nothing as we are already on the Favorites screen
+          } else if (index == 2) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const CartScreen()),
+            );
+          } else if (index == 3) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+            );
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favorites',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+      ),
     );
   }
 }
 
-class FavoriteProductCard extends StatelessWidget {
+class FavoriteProductCard extends StatefulWidget {
   final String title;
   final String subtitle;
   final String price;
@@ -101,9 +138,16 @@ class FavoriteProductCard extends StatelessWidget {
   });
 
   @override
+  State<FavoriteProductCard> createState() => _FavoriteProductCardState();
+}
+
+class _FavoriteProductCardState extends State<FavoriteProductCard> {
+  bool isFavorite = true;
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: const Color(0xFFFFF1F1),
         borderRadius: BorderRadius.circular(16),
@@ -111,37 +155,52 @@ class FavoriteProductCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Top Row: Like icon aligned to right
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: const [Icon(Icons.favorite, color: Colors.red, size: 18)],
+            children: [
+              IconButton(
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: Colors.red,
+                  size: 18,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isFavorite = !isFavorite;
+                  });
+                  // TODO: Add logic to remove from favorites list
+                },
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              ),
+            ],
           ),
-          const SizedBox(height: 7),
-
-          // Image with border radius
+          const SizedBox(height: 0),
           ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Image.asset(imagePath, height: 100, fit: BoxFit.contain),
+            child: Image.asset(
+              widget.imagePath,
+              height: 110,
+              fit: BoxFit.contain,
+            ),
           ),
           const SizedBox(height: 10),
 
-          // Text Content
           Text(
-            title,
+            widget.title,
             style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            subtitle,
+            widget.subtitle,
             style: const TextStyle(fontSize: 15, color: Colors.grey),
           ),
           const SizedBox(height: 5),
 
-          // Price
           Text(
-            price,
+            widget.price,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,

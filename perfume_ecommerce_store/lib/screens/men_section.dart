@@ -241,7 +241,7 @@ class _MenCollectionScreenState extends State<MenCollectionScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFD6ECF5),
+                        color: const Color(0xFFFFF1F1),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(

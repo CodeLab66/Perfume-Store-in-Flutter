@@ -3,6 +3,7 @@ import 'product_screen.dart';
 import 'women_section.dart';
 import 'men_section.dart';
 import 'bestsellers_section.dart';
+import 'favorite_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -118,7 +119,7 @@ class HomeScreen extends StatelessWidget {
           } else if (index == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const FavoritesScreen()),
+              MaterialPageRoute(builder: (context) => const FavoriteScreen()),
             );
           } else if (index == 2) {
             Navigator.push(
@@ -221,7 +222,6 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Navigate to ProductPageScreen and pass product details
         Navigator.push(
           context,
           MaterialPageRoute(

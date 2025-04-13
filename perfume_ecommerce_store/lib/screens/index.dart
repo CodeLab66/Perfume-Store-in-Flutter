@@ -5,6 +5,8 @@ import 'men_section.dart';
 import 'bestsellers_section.dart';
 import 'favorite_screen.dart';
 
+const Color primaryColor = Color(0xFFFFF1F1); // Card Color
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -12,24 +14,21 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
+        toolbarHeight: 80,
+        backgroundColor: const Color.fromARGB(169, 243, 160, 160),
+        automaticallyImplyLeading: false,
+        leading: null,
         centerTitle: true,
-        title: Image.asset('assets/images/roselle.png', height: 50),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SearchScreen()),
-              );
-            },
+        title: Center(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset('assets/images/roselle.png', height: 55),
           ),
-        ],
+        ),
       ),
+
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -38,20 +37,20 @@ class HomeScreen extends StatelessWidget {
               subtitle: 'The Best Perfume Ever',
               navigateTo: BestSellersScreen(),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
                 ProductCard(
                   title: 'Dior Sauvage',
                   subtitle: '50 ml',
-                  price: '89.99\$',
+                  price: 'Rs. 52,350',
                   imagePath: 'assets/images/dior_sauvage.jpeg',
                 ),
                 ProductCard(
                   title: 'Chanel Chance',
                   subtitle: '50 ml',
-                  price: '119.99\$',
+                  price: 'Rs. 60,999',
                   imagePath: 'assets/images/chanel_chance.jpeg',
                 ),
               ],
@@ -62,20 +61,20 @@ class HomeScreen extends StatelessWidget {
               subtitle: 'Make your fragrance your signature',
               navigateTo: MenCollectionScreen(),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
                 ProductCard(
-                  title: 'Versace Bright Crystal',
+                  title: 'Versace Crystal',
                   subtitle: '50 ml',
-                  price: '50.00\$',
+                  price: 'Rs. 45,000',
                   imagePath: 'assets/images/versace_bright_crystal.jpeg',
                 ),
                 ProductCard(
                   title: 'YSL Myself',
                   subtitle: '50 ml',
-                  price: '60.00\$',
+                  price: 'Rs. 50,000',
                   imagePath: 'assets/images/ysl_myself.jpeg',
                 ),
               ],
@@ -86,20 +85,20 @@ class HomeScreen extends StatelessWidget {
               subtitle: 'Elegance in every drop',
               navigateTo: WomenCollectionScreen(),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
                 ProductCard(
                   title: 'Gucci Bloom',
                   subtitle: '50 ml',
-                  price: '75.00\$',
+                  price: 'Rs. 55,000',
                   imagePath: 'assets/images/chanel_chance.jpeg',
                 ),
                 ProductCard(
                   title: 'Dior J\'adore',
                   subtitle: '50 ml',
-                  price: '95.00\$',
+                  price: 'Rs. 65,000',
                   imagePath: 'assets/images/chanel_chance.jpeg',
                 ),
               ],
@@ -110,6 +109,7 @@ class HomeScreen extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: const Color(0xFFE8A0A0),
         unselectedItemColor: Colors.grey,
+        currentIndex: 0,
         onTap: (index) {
           if (index == 0) {
             Navigator.push(

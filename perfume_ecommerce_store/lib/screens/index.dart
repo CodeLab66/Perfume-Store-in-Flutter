@@ -3,6 +3,7 @@ import 'product_screen.dart';
 import 'women_section.dart';
 import 'men_section.dart';
 import 'bestsellers_section.dart';
+import 'favorite_screen.dart';
 
 const Color primaryColor = Color(0xFFFFF1F1); // Card Color
 
@@ -118,7 +119,7 @@ class HomeScreen extends StatelessWidget {
           } else if (index == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const FavoritesScreen()),
+              MaterialPageRoute(builder: (context) => const FavoriteScreen()),
             );
           } else if (index == 2) {
             Navigator.push(

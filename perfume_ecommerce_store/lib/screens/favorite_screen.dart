@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'cart_screen.dart';
-import 'index.dart';
+import 'index.dart' hide CartScreen;
 
 class FavoriteScreen extends StatelessWidget {
   const FavoriteScreen({super.key});

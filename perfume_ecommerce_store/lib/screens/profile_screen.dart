@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CartScreen extends StatelessWidget {
-  const CartScreen({super.key});
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class CartScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: const Text(
-          'My Cart',
+          'Profile',
           style: TextStyle(
             color: Colors.black,
             fontSize: 25,
@@ -22,7 +22,7 @@ class CartScreen extends StatelessWidget {
       ),
       body: const Center(
         child: Text(
-          'Your cart is empty',
+          'Profile Coming Soon',
           style: TextStyle(fontSize: 18, color: Colors.grey),
         ),
       ),

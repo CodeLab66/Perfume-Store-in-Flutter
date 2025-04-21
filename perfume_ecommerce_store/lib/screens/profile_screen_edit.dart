@@ -1,0 +1,126 @@
+import 'package:flutter/material.dart';
+
+class ProfileEditPage extends StatefulWidget {
+  const ProfileEditPage({super.key});
+
+  @override
+  State<ProfileEditPage> createState() => _ProfileEditPageState();
+}
+
+class _ProfileEditPageState extends State<ProfileEditPage> {
+  final _formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController(text: "Arooj Qudsia");
+  final emailController = TextEditingController(text: "qudsia@gmail.com");
+  final phoneController = TextEditingController(text: "+1 234 567 890");
+  final locationController = TextEditingController(
+    text: "Street 123, City, Country",
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Edit Profile"),
+        backgroundColor: Colors.pink[300],
+        foregroundColor: Colors.white,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              _buildTextField("Name", nameController),
+              _buildTextField("Email", emailController),
+              _buildTextField("Mobile", phoneController),
+              _buildTextField("Address", locationController),
+              const SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.pop(context); // Go back to the previous screen
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.pink[300],
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 50,
+                    vertical: 14,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text("Save", style: TextStyle(fontSize: 16)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(String label, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+        ),
+        validator: (value) => value!.isEmpty ? "Please enter $label" : null,
+      ),
+    );
+  }
+}
+
+// Reusable Widgets
+class _infoRow extends StatelessWidget {
+  final String title;
+  final String value;
+
+  const _infoRow(this.title, this.value);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 14, color: Colors.black87),
+          ),
+          Text(value, style: const TextStyle(fontSize: 14, color: Colors.grey)),
+        ],
+      ),
+    );
+  }
+}
+
+class _labelValue extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _labelValue(this.label, this.value);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label.toUpperCase(),
+          style: const TextStyle(fontSize: 11, color: Colors.grey),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          value,
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+        ),
+      ],
+    );
+  }
+}

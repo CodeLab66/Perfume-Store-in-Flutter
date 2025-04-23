@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'profile_screen_edit.dart';
 
+const Color pinkColor = Color(0xFFE4B1AB);
+
 class ProfileViewPage extends StatelessWidget {
   const ProfileViewPage({super.key});
 
@@ -11,22 +13,30 @@ class ProfileViewPage extends StatelessWidget {
       body: Column(
         children: [
           Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFFff9a9e), Color(0xFFfad0c4)],
+                colors: [
+                  pinkColor.withOpacity(0.9),
+                  pinkColor.withOpacity(0.4),
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(30),
+              ),
             ),
             padding: const EdgeInsets.fromLTRB(20, 50, 20, 30),
             child: Column(
               children: [
                 Row(
-                  children: const [
-                    Icon(Icons.arrow_back, color: Colors.white),
-                    Spacer(),
-                    Text(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    const Spacer(),
+                    const Text(
                       "Profile",
                       style: TextStyle(
                         color: Colors.white,
@@ -34,12 +44,12 @@ class ProfileViewPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Spacer(),
-                    SizedBox(width: 24),
+                    const Spacer(),
+                    const SizedBox(width: 24),
                   ],
                 ),
                 const SizedBox(height: 20),
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 45,
                   backgroundColor: Colors.white,
                   child: Icon(Icons.person, size: 50, color: Colors.grey),
@@ -88,7 +98,7 @@ class ProfileViewPage extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.pink[300],
+                      backgroundColor: pinkColor,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 50,
                         vertical: 14,
@@ -128,7 +138,11 @@ class ProfileViewPage extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: pinkColor,
+            ),
           ),
           const SizedBox(height: 12),
           ...children,
@@ -138,7 +152,6 @@ class ProfileViewPage extends StatelessWidget {
   }
 }
 
-// Moved from profile_screen_edit.dart
 class InfoRow extends StatelessWidget {
   final String title;
   final String value;

@@ -5,6 +5,8 @@ class DeliveryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const themeColor = Color(0xFFD58580); // Pink color
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -44,13 +46,19 @@ class DeliveryScreen extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFD58580),
+                  backgroundColor: themeColor, // Pink button
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                child: const Text("Update", style: TextStyle(fontSize: 16)),
+                child: const Text(
+                  "Update",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ), // White text
+                ),
               ),
             ),
             const SizedBox(height: 20),

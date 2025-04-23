@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'cart_screen.dart';
 import 'delivery_screen.dart';
-import 'profile_screen_edit.dart';
+import 'profile_screen.dart';
+
+const Color pinkColor = Color(0xFFE4B1AB); // Define your pink accent color
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -11,7 +13,7 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  String selectedPaymentMethod = 'cash'; // 'cash' or 'card'
+  String _selectedPayment = "cod"; // 'card' or 'cod'
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +69,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             const SizedBox(height: 5),
             _infoRow(Icons.phone, "xxxxxxxxxxx"),
             const SizedBox(height: 5),
-            _infoRow(Icons.location_on, "123 Sunset blvd , LA"),
+            _infoRow(Icons.location_on, "123 Sunset Blvd, LA"),
             const Divider(height: 30),
 
             Row(
@@ -82,7 +84,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const ProfileEditPage(),
+                        builder: (_) => const ProfileViewPage(),
                       ),
                     );
                   },
@@ -94,30 +96,34 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ],
             ),
             const SizedBox(height: 5),
+
+            // Card Checkbox
             Row(
               children: [
                 Checkbox(
-                  value: selectedPaymentMethod == 'card',
+                  value: _selectedPayment == "card",
+                  activeColor: pinkColor, // Use pinkColor here
                   onChanged: (val) {
                     setState(() {
-                      selectedPaymentMethod = 'card';
+                      _selectedPayment = "card";
                     });
                   },
-                  activeColor: const Color(0xFFD58580),
                 ),
                 const Text("Card Number"),
               ],
             ),
+
+            // Cash on Delivery Checkbox
             Row(
               children: [
                 Checkbox(
-                  value: selectedPaymentMethod == 'cash',
+                  value: _selectedPayment == "cod",
+                  activeColor: pinkColor, // Use pinkColor here
                   onChanged: (val) {
                     setState(() {
-                      selectedPaymentMethod = 'cash';
+                      _selectedPayment = "cod";
                     });
                   },
-                  activeColor: const Color(0xFFD58580),
                 ),
                 const Text("Cash on Delivery"),
               ],
@@ -139,9 +145,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             const Divider(height: 10),
             _summaryLine("Total", 28.97, isTotal: true),
             const SizedBox(height: 30),
+
+            // Checkout Button
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFD58580),
+                backgroundColor: pinkColor, // Use pinkColor here
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),

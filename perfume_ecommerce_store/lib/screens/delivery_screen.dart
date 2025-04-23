@@ -21,12 +21,7 @@ class DeliveryScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 10),
-            Center(
-              child: Image.asset(
-                'assets/logo.png', // Make sure this path is correct
-                height: 60,
-              ),
-            ),
+            Center(child: Image.asset('assets/images/roselle.png', height: 60)),
             const SizedBox(height: 20),
             const Align(
               alignment: Alignment.centerLeft,

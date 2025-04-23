@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'cart_screen.dart';
-import 'delivery_screen.dart'; // create this page
-import 'profile_screen_edit.dart'; // create this page
+import 'delivery_screen.dart';
+import 'profile_screen_edit.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -11,7 +11,7 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  bool useCashOnDelivery = true;
+  String selectedPaymentMethod = 'cash'; // 'cash' or 'card'
 
   @override
   Widget build(BuildContext context) {
@@ -96,17 +96,28 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             const SizedBox(height: 5),
             Row(
               children: [
-                Checkbox(value: false, onChanged: (_) {}),
+                Checkbox(
+                  value: selectedPaymentMethod == 'card',
+                  onChanged: (val) {
+                    setState(() {
+                      selectedPaymentMethod = 'card';
+                    });
+                  },
+                  activeColor: const Color(0xFFD58580),
+                ),
                 const Text("Card Number"),
               ],
             ),
             Row(
               children: [
                 Checkbox(
-                  value: useCashOnDelivery,
+                  value: selectedPaymentMethod == 'cash',
                   onChanged: (val) {
-                    setState(() => useCashOnDelivery = val ?? false);
+                    setState(() {
+                      selectedPaymentMethod = 'cash';
+                    });
                   },
+                  activeColor: const Color(0xFFD58580),
                 ),
                 const Text("Cash on Delivery"),
               ],

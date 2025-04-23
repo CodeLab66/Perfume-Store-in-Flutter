@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'index.dart';
 import 'favorite_screen.dart';
 import 'profile_screen.dart';
+import 'checkout_screen.dart'; // Make sure this import exists
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -12,6 +13,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   final Color pinkColor = const Color(0xFFE4B1AB);
+
   final List<Map<String, dynamic>> cartItems = [
     {
       'title': 'Myself',
@@ -69,7 +71,7 @@ class _CartScreenState extends State<CartScreen> {
           border: Border(top: BorderSide(color: Colors.grey.shade200)),
         ),
         child: BottomNavigationBar(
-          currentIndex: 2, // Cart is selected
+          currentIndex: 2,
           selectedItemColor: pinkColor,
           unselectedItemColor: Colors.grey,
           backgroundColor: Colors.white,
@@ -306,7 +308,14 @@ class _CartScreenState extends State<CartScreen> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.65,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CheckoutScreen(),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFE4B1AB),
                       padding: const EdgeInsets.symmetric(vertical: 10),

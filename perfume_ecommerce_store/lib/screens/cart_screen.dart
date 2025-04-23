@@ -328,11 +328,7 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                     child: const Text(
                       'Go to Checkout',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ),
                 ),

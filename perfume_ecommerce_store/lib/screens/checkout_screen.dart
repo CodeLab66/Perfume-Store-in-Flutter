@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'cart_screen.dart'; // Make sure this points to your actual CartScreen file
+import 'cart_screen.dart';
+//import 'delivery_screen.dart'; // create this page
+import 'profile_screen_edit.dart'; // create this page
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -9,75 +11,17 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  String name = "John Doe";
-  String phone = "xxxxxxxxxxx";
-  String address = "123 Sunset Blvd, LA";
-  String paymentMethod = "Card Number: **** **** **** 1234";
-
-  void _editInfo(String title, String currentValue, Function(String) onSave) {
-    final controller = TextEditingController(text: currentValue);
-
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text("Edit $title"),
-            content: TextField(
-              controller: controller,
-              decoration: InputDecoration(hintText: "Enter $title"),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Cancel"),
-              ),
-              TextButton(
-                onPressed: () {
-                  onSave(controller.text);
-                  Navigator.pop(context);
-                },
-                child: const Text("Save"),
-              ),
-            ],
-          ),
-    );
-  }
-
-  void _changePaymentMethod() {
-    showModalBottomSheet(
-      context: context,
-      builder:
-          (_) => Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(Icons.credit_card),
-                title: const Text("Credit/Debit Card"),
-                onTap: () {
-                  setState(
-                    () => paymentMethod = "Card Number: **** **** **** 1234",
-                  );
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.account_balance_wallet),
-                title: const Text("PayPal"),
-                onTap: () {
-                  setState(() => paymentMethod = "PayPal: johndoe@email.com");
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-    );
-  }
+  bool useCashOnDelivery = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Checkout"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -92,60 +36,43 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             ),
           ),
         ],
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: ListView(
           children: [
-            const Text(
-              "Delivery Information",
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Delivery Information",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ProfileEditPage(),
+                      ),
+                      //MaterialPageRoute(builder: (_) => const DeliveryScreen()),
+                    );
+                  },
+                  child: const Text(
+                    "Edit",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 10),
-            _infoRow(
-              Icons.person,
-              name,
-              trailing: "Edit",
-              onTap:
-                  () => _editInfo(
-                    "Name",
-                    name,
-                    (val) => setState(() => name = val),
-                  ),
-            ),
-            const SizedBox(height: 10),
-            _infoRow(
-              Icons.phone,
-              phone,
-              trailing: "Edit",
-              onTap:
-                  () => _editInfo(
-                    "Phone",
-                    phone,
-                    (val) => setState(() => phone = val),
-                  ),
-            ),
-            const SizedBox(height: 10),
-            _infoRow(
-              Icons.location_on,
-              address,
-              trailing: "Edit",
-              onTap:
-                  () => _editInfo(
-                    "Address",
-                    address,
-                    (val) => setState(() => address = val),
-                  ),
-            ),
+            _infoRow(Icons.person, "John Doe"),
+            const SizedBox(height: 5),
+            _infoRow(Icons.phone, "xxxxxxxxxxx"),
+            const SizedBox(height: 5),
+            _infoRow(Icons.location_on, "123 Sunset blvd , LA"),
             const Divider(height: 30),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -154,7 +81,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 GestureDetector(
-                  onTap: _changePaymentMethod,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ProfileEditPage(),
+                      ),
+                    );
+                  },
                   child: const Text(
                     "Change",
                     style: TextStyle(color: Colors.grey),
@@ -163,25 +97,39 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ],
             ),
             const SizedBox(height: 5),
-            Text(paymentMethod, style: const TextStyle(color: Colors.grey)),
+            Row(
+              children: [
+                Checkbox(value: false, onChanged: (_) {}),
+                const Text("Card Number"),
+              ],
+            ),
+            Row(
+              children: [
+                Checkbox(
+                  value: useCashOnDelivery,
+                  onChanged: (val) {
+                    setState(() => useCashOnDelivery = val ?? false);
+                  },
+                ),
+                const Text("Cash on Delivery"),
+              ],
+            ),
+
             const Divider(height: 30),
             const Text(
               "Order Summary",
-              style: TextStyle(
-                fontStyle: FontStyle.italic,
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 10),
             _summaryHeader(),
             _summaryItem("Myself (50ml)", 2, 141.99),
-            _summaryItem("Myself (50ml)", 1, 70.99),
+            _summaryItem("Myself (50ml)", 2, 141.99),
+            _summaryItem("Myself (50ml)", 2, 141.99),
             const Divider(height: 30),
             _summaryLine("Shipping", 0.00),
             _summaryLine("Discount", 0.00, isDiscount: true),
             const Divider(height: 10),
-            _summaryLine("Total", 212.98, isTotal: true),
+            _summaryLine("Total", 28.97, isTotal: true),
             const SizedBox(height: 30),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -207,28 +155,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Widget _infoRow(
-    IconData icon,
-    String text, {
-    String? trailing,
-    VoidCallback? onTap,
-  }) {
+  Widget _infoRow(IconData icon, String value) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Icon(icon, size: 20),
-            const SizedBox(width: 8),
-            Text(text),
-          ],
-        ),
-        if (trailing != null)
-          GestureDetector(
-            onTap: onTap,
-            child: Text(trailing, style: const TextStyle(color: Colors.grey)),
-          ),
-      ],
+      children: [Icon(icon, size: 20), const SizedBox(width: 8), Text(value)],
     );
   }
 
@@ -243,11 +172,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Widget _summaryItem(String name, int qty, double price) {
+  Widget _summaryItem(String item, int qty, double price) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(name),
+        Text(item),
         Text(qty.toString()),
         Text("\$${price.toStringAsFixed(2)}"),
       ],

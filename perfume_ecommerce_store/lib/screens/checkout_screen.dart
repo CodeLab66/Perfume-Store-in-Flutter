@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'cart_screen.dart';
-//import 'delivery_screen.dart'; // create this page
+import 'delivery_screen.dart'; // create this page
 import 'profile_screen_edit.dart'; // create this page
 
 class CheckoutScreen extends StatefulWidget {
@@ -52,10 +52,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => const ProfileEditPage(),
-                      ),
-                      //MaterialPageRoute(builder: (_) => const DeliveryScreen()),
+                      MaterialPageRoute(builder: (_) => const DeliveryScreen()),
                     );
                   },
                   child: const Text(

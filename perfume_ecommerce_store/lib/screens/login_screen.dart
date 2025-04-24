@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'signUp_screen.dart';
+import 'signup_screen.dart';
 import 'ForgetPassword_screen.dart';
 import 'index.dart';
 

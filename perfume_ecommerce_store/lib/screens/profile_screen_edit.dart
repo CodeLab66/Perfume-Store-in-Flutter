@@ -76,7 +76,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.pink[300],
+                  backgroundColor: Colors.pink[100],
                   padding: const EdgeInsets.symmetric(
                     horizontal: 50,
                     vertical: 14,

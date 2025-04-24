@@ -5,6 +5,7 @@ import 'men_section.dart';
 import 'bestsellers_section.dart';
 import 'favorite_screen.dart';
 import 'profile_screen.dart';
+import 'cart_screen.dart';
 
 const Color primaryColor = Color(0xFFFFF1F1); // Card Color
 
@@ -16,7 +17,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
-        backgroundColor: const Color.fromARGB(169, 243, 160, 160),
+        backgroundColor: Colors.white70,
         automaticallyImplyLeading: false,
         leading: null,
         centerTitle: true,
@@ -286,38 +287,38 @@ class SearchScreen extends StatelessWidget {
   }
 }
 
-class FavoritesScreen extends StatelessWidget {
-  const FavoritesScreen({super.key});
+// class FavoritesScreen extends StatelessWidget {
+//   const FavoritesScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Favorites')),
-      body: const Center(child: Text('Favorites Screen')),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text('Favorites')),
+//       body: const Center(child: Text('Favorites Screen')),
+//     );
+//   }
+// }
 
-class CartScreen extends StatelessWidget {
-  const CartScreen({super.key});
+// class CartScreen extends StatelessWidget {
+//   const CartScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Cart')),
-      body: const Center(child: Text('Cart Screen')),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text('Cart')),
+//       body: const Center(child: Text('Cart Screen')),
+//     );
+//   }
+// }
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+// class ProfileScreen extends StatelessWidget {
+//   const ProfileScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
-      body: const Center(child: Text('Profile Screen')),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text('Profile')),
+//       body: const Center(child: Text('Profile Screen')),
+//     );
+//   }
+// }

@@ -110,11 +110,11 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 }
 
 // Reusable Widgets
-class _infoRow extends StatelessWidget {
+class _InfoRow extends StatelessWidget {
   final String title;
   final String value;
 
-  const _infoRow(this.title, this.value);
+  const _InfoRow(this.title, this.value);
 
   @override
   Widget build(BuildContext context) {
@@ -134,11 +134,11 @@ class _infoRow extends StatelessWidget {
   }
 }
 
-class _labelValue extends StatelessWidget {
+class _LabelValue extends StatelessWidget {
   final String label;
   final String value;
 
-  const _labelValue(this.label, this.value);
+  const _LabelValue(this.label, this.value);
 
   @override
   Widget build(BuildContext context) {

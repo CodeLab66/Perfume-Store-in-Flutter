@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "456010656473",
-    "project_id": "roselle-store-c8ebf",
-    "storage_bucket": "roselle-store-c8ebf.firebasestorage.app"
+    "project_number": "1085408306223",
+    "project_id": "perfume-store-77dde",
+    "storage_bucket": "perfume-store-77dde.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:456010656473:android:403b9f23b6b94b2cdc2cc8",
+        "mobilesdk_app_id": "1:1085408306223:android:a0e71d67f46f29040c92da",
         "android_client_info": {
           "package_name": "com.example.perfume_ecommerce_store"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA7-3WhjYjfrrXdidOILBeENmgacWItBKU"
+          "current_key": "AIzaSyBLWHIyELWRuKt3pvZCcebRslX6sjhyoH4"
         }
       ],
       "services": {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'index.dart';
+import 'cart_screen.dart';
+import 'profile_screen.dart';
 
 class FavoriteScreen extends StatelessWidget {
   const FavoriteScreen({super.key});
@@ -100,7 +102,7 @@ class FavoriteScreen extends StatelessWidget {
           } else if (index == 3) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ProfileScreen()),
+              MaterialPageRoute(builder: (context) => const ProfileViewPage()),
             );
           }
         },

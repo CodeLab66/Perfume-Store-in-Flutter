@@ -31,8 +31,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Edit Profile"),
-        backgroundColor: Colors.pink[100],
-        foregroundColor: Colors.white,
+        backgroundColor: Color(0xFFE4B1AB),
+        foregroundColor: Colors.black,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -76,7 +76,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.pink[100],
+                  backgroundColor: Color(0xFFE4B1AB),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 50,
                     vertical: 14,
@@ -85,7 +85,10 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text("Save", style: TextStyle(fontSize: 16)),
+                child: const Text(
+                  "Save",
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
               ),
             ],
           ),

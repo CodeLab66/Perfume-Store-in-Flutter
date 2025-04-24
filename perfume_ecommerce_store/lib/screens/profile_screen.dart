@@ -14,14 +14,17 @@ class ProfileViewPage extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  pinkColor.withOpacity(0.9),
-                  pinkColor.withOpacity(0.4),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+              // gradient: LinearGradient(
+              //   colors: [
+              //     pinkColor.withOpacity(0.9),
+              //     pinkColor.withOpacity(0.4),
+              //   ],
+              //   begin: Alignment.topLeft,
+              //   end: Alignment.bottomRight,
+              // ),
+              color: const Color(
+                0xFFE4B1AB,
+              ), // This is a shade of pink with the hex value #E4B1AB
               borderRadius: const BorderRadius.vertical(
                 bottom: Radius.circular(30),
               ),

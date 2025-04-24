@@ -133,16 +133,26 @@ class _ProductPageScreenState extends State<ProductPageScreen> {
                   Row(
                     children: [
                       ChoiceChip(
-                        label: const Text('50 ml'),
+                        label: const Text(
+                          '50 ml',
+                          style: TextStyle(color: Colors.black),
+                        ),
                         selected: selectedSize == '50 ml',
+                        selectedColor: const Color(0xFFE8A0A0),
+                        backgroundColor: const Color(0xFFF4D0D0),
                         onSelected: (bool selected) {
                           if (selected) selectSize('50 ml');
                         },
                       ),
                       const SizedBox(width: 10),
                       ChoiceChip(
-                        label: const Text('100 ml'),
+                        label: const Text(
+                          '100 ml',
+                          style: TextStyle(color: Colors.black),
+                        ),
                         selected: selectedSize == '100 ml',
+                        selectedColor: const Color(0xFFE8A0A0),
+                        backgroundColor: const Color(0xFFF4D0D0),
                         onSelected: (bool selected) {
                           if (selected) selectSize('100 ml');
                         },
@@ -158,7 +168,10 @@ class _ProductPageScreenState extends State<ProductPageScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFE8A0A0),
                   ),
-                  child: const Text('Add to Cart'),
+                  child: const Text(
+                    'Add to Cart',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ],

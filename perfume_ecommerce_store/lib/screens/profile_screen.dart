@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'profile_screen_edit.dart';
+import 'index.dart'; // Add this import
+import 'favorite_screen.dart'; // Add this import
+import 'cart_screen.dart'; // Add this import
 
 const Color pinkColor = Color(0xFFE4B1AB);
 
@@ -10,6 +13,55 @@ class ProfileViewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF9F9F9),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: Colors.grey.shade200)),
+        ),
+        child: BottomNavigationBar(
+          currentIndex: 3, // Profile tab is selected
+          selectedItemColor: pinkColor,
+          unselectedItemColor: Colors.grey,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          type: BottomNavigationBarType.fixed,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          onTap: (index) {
+            if (index != 3) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) =>
+                          index == 0
+                              ? const HomeScreen()
+                              : index == 1
+                              ? const FavoriteScreen()
+                              : const CartScreen(),
+                ),
+              );
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined, size: 28),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.favorite_border_outlined, size: 28),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart, size: 28),
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline, size: 28),
+              label: '',
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Container(

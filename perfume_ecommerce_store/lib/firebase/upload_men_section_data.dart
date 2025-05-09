@@ -6,25 +6,25 @@ Future<void> uploadMenSectionData() async {
       "title": "Bleu de Chanel",
       "subtitle": "50 ml",
       "price": 85.00,
-      "imagePath": "https://example.com/ysl_myself.jpeg",
+      "imagePath": "assets/images/ysl_myself.jpeg",
     },
     {
       "title": "Dior Sauvage",
       "subtitle": "100 ml",
       "price": 99.00,
-      "imagePath": "https://example.com/versace_bright_crystal.jpeg",
+      "imagePath": "assets/images/versace_bright_crystal.jpeg",
     },
     {
       "title": "Versace Eros",
       "subtitle": "50 ml",
       "price": 78.00,
-      "imagePath": "https://example.com/ysl_myself.jpeg",
+      "imagePath": "assets/images/ysl_myself.jpeg",
     },
     {
       "title": "Armani Code",
       "subtitle": "100 ml",
       "price": 89.00,
-      "imagePath": "https://example.com/versace_bright_crystal.jpeg",
+      "imagePath": "assets/images/versace_bright_crystal.jpeg",
     },
   ];
 

@@ -1,4 +1,7 @@
+// lib/screens/index.dart
+
 import 'package:flutter/material.dart';
+import '../firebase/index_firebase.dart';
 import 'product_screen.dart';
 import 'women_section.dart';
 import 'men_section.dart';
@@ -7,113 +10,118 @@ import 'favorite_screen.dart';
 import 'profile_screen.dart';
 import 'cart_screen.dart';
 
-const Color primaryColor = Color(0xFFFFF1F1); // Card Color
+const Color primaryColor = Color(0xFFFFF1F1);
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final firestoreService = FirestoreService();
+
+    Widget buildSection(
+      String title,
+      String subtitle,
+      Widget navigateTo,
+      Stream<List<Product>> stream,
+    ) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SectionHeader(
+            title: title,
+            subtitle: subtitle,
+            navigateTo: navigateTo,
+          ),
+          const SizedBox(height: 20),
+          StreamBuilder<List<Product>>(
+            stream: stream,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
+              final products = snapshot.data ?? [];
+              if (products.isEmpty) {
+                return const Center(child: Text('No products available'));
+              }
+              // limit to max 3 products
+              final displayed = products.take(3).toList();
+
+              // ← wrap in horizontal scroll
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children:
+                      displayed.map((p) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 15),
+                          child: ProductCard(
+                            title: p.name,
+                            subtitle: '50 ml',
+                            price: 'Rs. ${p.price}',
+                            imagePath: p.image,
+                          ),
+                        );
+                      }).toList(),
+                ),
+              );
+            },
+          ),
+        ],
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
         backgroundColor: Colors.white70,
         automaticallyImplyLeading: false,
-        leading: null,
         centerTitle: true,
-        title: Center(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset('assets/images/roselle.png', height: 55),
-          ),
+        title: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.asset('assets/images/roselle.png', height: 55),
         ),
       ),
-
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionHeader(
-              title: 'Best Sellers',
-              subtitle: 'The Best Perfume Ever',
-              navigateTo: BestSellersScreen(),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                ProductCard(
-                  title: 'Dior Sauvage',
-                  subtitle: '50 ml',
-                  price: 'Rs. 52,350',
-                  imagePath: 'assets/images/dior_sauvage.jpeg',
-                ),
-                ProductCard(
-                  title: 'Chanel Chance',
-                  subtitle: '50 ml',
-                  price: 'Rs. 60,999',
-                  imagePath: 'assets/images/chanel_chance.jpeg',
-                ),
-              ],
+            buildSection(
+              'Best Sellers',
+              'The Best Perfume Ever',
+              const BestSellersScreen(),
+              firestoreService.fetchProductsByCategory('Best Seller'),
             ),
             const SizedBox(height: 30),
-            const SectionHeader(
-              title: 'Men',
-              subtitle: 'Make your fragrance your signature',
-              navigateTo: MenCollectionScreen(),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                ProductCard(
-                  title: 'Versace Crystal',
-                  subtitle: '50 ml',
-                  price: 'Rs. 45,000',
-                  imagePath: 'assets/images/versace_bright_crystal.jpeg',
-                ),
-                ProductCard(
-                  title: 'YSL Myself',
-                  subtitle: '50 ml',
-                  price: 'Rs. 50,000',
-                  imagePath: 'assets/images/ysl_myself.jpeg',
-                ),
-              ],
+            buildSection(
+              'Men',
+              'Make your fragrance your signature',
+              const MenCollectionScreen(),
+              firestoreService.fetchProductsByCategory('Men'),
             ),
             const SizedBox(height: 30),
-            const SectionHeader(
-              title: 'Women',
-              subtitle: 'Elegance in every drop',
-              navigateTo: WomenCollectionScreen(),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                ProductCard(
-                  title: 'Gucci Bloom',
-                  subtitle: '50 ml',
-                  price: 'Rs. 55,000',
-                  imagePath: 'assets/images/chanel_chance.jpeg',
-                ),
-                ProductCard(
-                  title: 'Dior J\'adore',
-                  subtitle: '50 ml',
-                  price: 'Rs. 65,000',
-                  imagePath: 'assets/images/chanel_chance.jpeg',
-                ),
-              ],
+            buildSection(
+              'Women',
+              'Elegance in every drop',
+              const WomenCollectionScreen(),
+              firestoreService.fetchProductsByCategory('Women'),
             ),
           ],
         ),
       ),
+
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           border: Border(top: BorderSide(color: Colors.grey.shade200)),
         ),
         child: BottomNavigationBar(
-          currentIndex: 0, // Home tab is selected
+          currentIndex: 0,
           selectedItemColor: const Color(0xFFE4B1AB),
           unselectedItemColor: Colors.grey,
           backgroundColor: Colors.white,
@@ -121,17 +129,18 @@ class HomeScreen extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          onTap: (index) {
-            if (index != 0) {
+          onTap: (i) {
+            if (i != 0) {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      index == 1
-                          ? const FavoriteScreen()
-                          : index == 2
-                          ? const CartScreen()
-                          : const ProfileViewPage(),
+                  builder:
+                      (_) =>
+                          i == 1
+                              ? const FavoriteScreen()
+                              : i == 2
+                              ? const CartScreen()
+                              : const ProfileViewPage(),
                 ),
               );
             }
@@ -160,6 +169,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+/// Reusable section header
 class SectionHeader extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -195,12 +205,11 @@ class SectionHeader extends StatelessWidget {
           ],
         ),
         TextButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => navigateTo),
-            );
-          },
+          onPressed:
+              () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => navigateTo),
+              ),
           child: const Text(
             'See All >',
             style: TextStyle(
@@ -214,6 +223,7 @@ class SectionHeader extends StatelessWidget {
   }
 }
 
+/// Card widget for a product
 class ProductCard extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -231,32 +241,29 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Navigate to ProductPageScreen and pass product details
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder:
-                (context) => ProductPageScreen(
-                  title: title,
-                  subtitle: subtitle,
-                  price: price,
-                  imagePath: imagePath,
-                ),
+      onTap:
+          () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (_) => ProductPageScreen(
+                    title: title,
+                    subtitle: subtitle,
+                    price: price,
+                    imagePath: imagePath,
+                  ),
+            ),
           ),
-        );
-      },
       child: Container(
         width: MediaQuery.of(context).size.width * 0.4,
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: const Color(0xFFFFF1F1),
+          color: primaryColor,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(imagePath, height: 100, fit: BoxFit.contain),
+            Image.network(imagePath, height: 100, fit: BoxFit.contain),
             const SizedBox(height: 10),
             Text(
               title,
@@ -272,7 +279,7 @@ class ProductCard extends StatelessWidget {
               price,
               style: const TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.normal,
                 color: Colors.black,
               ),
             ),
@@ -282,51 +289,3 @@ class ProductCard extends StatelessWidget {
     );
   }
 }
-
-class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Search')),
-      body: const Center(child: Text('Search Screen')),
-    );
-  }
-}
-
-// class FavoritesScreen extends StatelessWidget {
-//   const FavoritesScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Favorites')),
-//       body: const Center(child: Text('Favorites Screen')),
-//     );
-//   }
-// }
-
-// class CartScreen extends StatelessWidget {
-//   const CartScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Cart')),
-//       body: const Center(child: Text('Cart Screen')),
-//     );
-//   }
-// }
-
-// class ProfileScreen extends StatelessWidget {
-//   const ProfileScreen({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Profile')),
-//       body: const Center(child: Text('Profile Screen')),
-//     );
-//   }
-// }

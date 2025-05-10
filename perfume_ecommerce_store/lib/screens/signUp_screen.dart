@@ -36,7 +36,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _errorMessage = null;
       });
 
-      // Call the Firebase logic from SignUpService
       final error = await _signUpService.signUp(
         name: _nameController.text,
         email: _emailController.text,
@@ -44,7 +43,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
 
       if (error == null) {
-        // Signup successful, navigate to LoginScreen
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Signup successful! Please log in.')),

@@ -18,20 +18,17 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     text: "Street 123, City, Country",
   );
 
-  // Payment Info Controllers
-  final cardNumberController = TextEditingController(
-    text: "1234 5678 9012 3456",
-  );
-  final cardHolderController = TextEditingController(text: "Arooj Khan");
-  final expiryController = TextEditingController(text: "08/25");
-  final cvvController = TextEditingController(text: "888");
+  // Payment Info
+  String selectedPaymentMethod = "Jazzcash";
+  final accountNumberController = TextEditingController(text: "03244551504");
+  final List<String> paymentMethods = ["Jazzcash", "Easypaisa"];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Edit Profile"),
-        backgroundColor: Color(0xFFE4B1AB),
+        backgroundColor: const Color(0xFFE4B1AB),
         foregroundColor: Colors.black,
       ),
       body: SingleChildScrollView(
@@ -58,15 +55,38 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              _buildTextField("Credit Card Number", cardNumberController),
-              _buildTextField("Card Holder Name", cardHolderController),
-              Row(
-                children: [
-                  Expanded(child: _buildTextField("Expiry", expiryController)),
-                  const SizedBox(width: 16),
-                  Expanded(child: _buildTextField("CVV", cvvController)),
-                ],
+
+              DropdownButtonFormField<String>(
+                value: selectedPaymentMethod,
+                decoration: const InputDecoration(
+                  labelText: "Payment Method",
+                  border: OutlineInputBorder(),
+                ),
+                items:
+                    paymentMethods.map((method) {
+                      return DropdownMenuItem(
+                        value: method,
+                        child: Text(method),
+                      );
+                    }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedPaymentMethod = value!;
+                  });
+                },
               ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: accountNumberController,
+                decoration: const InputDecoration(
+                  labelText: "Account Number",
+                  border: OutlineInputBorder(),
+                ),
+                validator:
+                    (value) =>
+                        value!.isEmpty ? "Please enter account number" : null,
+              ),
+
               const SizedBox(height: 30),
 
               ElevatedButton(
@@ -76,7 +96,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFE4B1AB),
+                  backgroundColor: const Color(0xFFE4B1AB),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 50,
                     vertical: 14,
@@ -108,56 +128,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         ),
         validator: (value) => value!.isEmpty ? "Please enter $label" : null,
       ),
-    );
-  }
-}
-
-// Reusable Widgets
-class _InfoRow extends StatelessWidget {
-  final String title;
-  final String value;
-
-  const _InfoRow(this.title, this.value);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 14, color: Colors.black87),
-          ),
-          Text(value, style: const TextStyle(fontSize: 14, color: Colors.grey)),
-        ],
-      ),
-    );
-  }
-}
-
-class _LabelValue extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const _LabelValue(this.label, this.value);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label.toUpperCase(),
-          style: const TextStyle(fontSize: 11, color: Colors.grey),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          value,
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-        ),
-      ],
     );
   }
 }

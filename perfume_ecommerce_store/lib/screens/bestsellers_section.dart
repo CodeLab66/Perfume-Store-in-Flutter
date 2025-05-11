@@ -61,9 +61,7 @@ class BestSellersScreen extends StatelessWidget {
 
                   final products = snapshot.data ?? [];
                   if (products.isEmpty) {
-                    return const Center(
-                      child: Text('No best sellers available'),
-                    );
+                    return const Center(child: Text('No products available'));
                   }
 
                   return GridView.builder(
@@ -83,12 +81,7 @@ class BestSellersScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder:
-                                  (_) => ProductPageScreen(
-                                    title: product.name,
-                                    subtitle: product.size,
-                                    price: 'Rs. ${product.price}',
-                                    imagePath: product.image,
-                                  ),
+                                  (_) => ProductPageScreen(title: product.name),
                             ),
                           );
                         },
@@ -101,13 +94,10 @@ class BestSellersScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  product.image,
-                                  height: 100,
-                                  fit: BoxFit.contain,
-                                ),
+                              Image.network(
+                                product.image,
+                                height: 100,
+                                fit: BoxFit.contain,
                               ),
                               const SizedBox(height: 10),
                               Text(
@@ -127,7 +117,7 @@ class BestSellersScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                'Rs. ${product.price}',
+                                'Rs. ${product.price.toStringAsFixed(2)}',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

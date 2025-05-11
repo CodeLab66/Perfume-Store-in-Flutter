@@ -75,12 +75,7 @@ class _MenCollectionScreenState extends State<MenCollectionScreen> {
                             context,
                             MaterialPageRoute(
                               builder:
-                                  (_) => ProductPageScreen(
-                                    title: product.name,
-                                    subtitle: product.size,
-                                    price: product.price.toStringAsFixed(2),
-                                    imagePath: product.image,
-                                  ),
+                                  (_) => ProductPageScreen(title: product.name),
                             ),
                           );
                         },

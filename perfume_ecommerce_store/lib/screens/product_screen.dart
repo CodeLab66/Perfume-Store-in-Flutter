@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../firebase/product_firebase.dart' as product_firebase;
 
+// Move favorites to top-level so it can be imported
+List<String> favorites = [];
+
 class ProductPageScreen extends StatefulWidget {
   final String title;
 
@@ -12,7 +15,6 @@ class ProductPageScreen extends StatefulWidget {
 
 class _ProductPageScreenState extends State<ProductPageScreen> {
   bool isFavorited = false;
-  static final List<String> favorites = [];
   static final List<String> cart = [];
   String selectedSize = '50 ml';
 

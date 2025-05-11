@@ -1,8 +1,8 @@
 // lib/screens/index.dart
 
 import 'package:flutter/material.dart';
-import '../firebase/index_firebase.dart';
-import 'product_screen.dart';
+import '../firebase/index_firebase.dart'; // FirestoreService
+import '../firebase/product_firebase.dart'; // Product model
 import 'women_section.dart';
 import 'men_section.dart';
 import 'bestsellers_section.dart';
@@ -50,24 +50,25 @@ class HomeScreen extends StatelessWidget {
               // limit to max 3 products
               final displayed = products.take(3).toList();
 
-              // ← wrap in horizontal scroll
               return SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.only(bottom: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:
-                      displayed.map((p) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 15),
-                          child: ProductCard(
-                            title: p.name,
-                            subtitle: '50 ml',
-                            price: 'Rs. ${p.price}',
-                            imagePath: p.image,
-                          ),
-                        );
-                      }).toList(),
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children:
+                        displayed.map((p) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: ProductCard(
+                              title: p.name,
+                              subtitle: '50 ml',
+                              price: 'Rs. ${p.price}',
+                              imagePath: p.image,
+                            ),
+                          );
+                        }).toList(),
+                  ),
                 ),
               );
             },
@@ -115,7 +116,6 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           border: Border(top: BorderSide(color: Colors.grey.shade200)),
@@ -169,7 +169,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-/// Reusable section header
+/// Reusable section header widget
 class SectionHeader extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -240,51 +240,38 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap:
-          () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder:
-                  (_) => ProductPageScreen(
-                    title: title,
-                    subtitle: subtitle,
-                    price: price,
-                    imagePath: imagePath,
-                  ),
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.4,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: primaryColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(child: Image.network(imagePath, fit: BoxFit.contain)),
+          const SizedBox(height: 10),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
+          ),
+          const Spacer(),
+          Text(
+            price,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
             ),
           ),
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.4,
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: primaryColor,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Column(
-          children: [
-            Image.network(imagePath, height: 100, fit: BoxFit.contain),
-            const SizedBox(height: 10),
-            Text(
-              title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            Text(
-              subtitle,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              price,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.normal,
-                color: Colors.black,
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }

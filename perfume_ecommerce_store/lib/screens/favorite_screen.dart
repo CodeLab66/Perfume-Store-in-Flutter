@@ -173,6 +173,7 @@ class _FavoriteProductCardState extends State<FavoriteProductCard> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -194,29 +195,25 @@ class _FavoriteProductCardState extends State<FavoriteProductCard> {
             ],
           ),
           const SizedBox(height: 2),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
-              widget.imagePath,
-              height: 110,
-              fit: BoxFit.contain,
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(widget.imagePath, fit: BoxFit.contain),
             ),
           ),
-          const SizedBox(height: 5),
-
+          const SizedBox(height: 8),
           Text(
             widget.title,
-            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           Text(
             widget.subtitle,
-            style: const TextStyle(fontSize: 15, color: Colors.grey),
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
           ),
-          const SizedBox(height: 5),
-
+          const SizedBox(height: 8),
           Text(
             widget.price,
             style: const TextStyle(

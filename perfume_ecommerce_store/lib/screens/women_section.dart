@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/product_model.dart';
+import '../firebase/index_firebase.dart' as firebase_index;
+import 'product_screen.dart';
 
 class WomenCollectionScreen extends StatefulWidget {
   const WomenCollectionScreen({super.key});
@@ -10,48 +10,133 @@ class WomenCollectionScreen extends StatefulWidget {
 }
 
 class _WomenCollectionScreenState extends State<WomenCollectionScreen> {
-  List<Product> perfumes = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPerfumes();
-  }
-
-  Future<void> fetchPerfumes() async {
-    try {
-      final querySnapshot =
-          await FirebaseFirestore.instance.collection('women_section').get();
-      setState(() {
-        perfumes =
-            querySnapshot.docs
-                .map((doc) => Product.fromFirestore(doc.data()))
-                .toList();
-      });
-    } catch (e) {
-      print('Error fetching perfumes: $e');
-    }
-  }
+  final firebase_index.FirestoreService firestoreService =
+      firebase_index.FirestoreService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Women Collection')),
-      body:
-          perfumes.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                itemCount: perfumes.length,
-                itemBuilder: (context, index) {
-                  final perfume = perfumes[index];
-                  return ListTile(
-                    leading: Image.network(perfume.imagePath),
-                    title: Text(perfume.title),
-                    subtitle: Text(perfume.subtitle),
-                    trailing: Text('${perfume.price.toStringAsFixed(2)}'),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        title: Image.asset('assets/images/roselle.png', height: 50),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search, color: Colors.black),
+            onPressed: () {},
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Women Collection',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'AnticSlab',
+              ),
+            ),
+            const Text(
+              'Elegance in every drop',
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: StreamBuilder<List<firebase_index.Product>>(
+                stream: firestoreService.fetchProductsByCategory('Women'),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: \\${snapshot.error}'));
+                  }
+                  final products = snapshot.data ?? [];
+                  if (products.isEmpty) {
+                    return const Center(child: Text('No products available'));
+                  }
+                  return GridView.builder(
+                    itemCount: products.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 20,
+                          childAspectRatio: 0.7,
+                        ),
+                    itemBuilder: (context, index) {
+                      final product = products[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (_) => ProductPageScreen(
+                                    title: product.name,
+                                    subtitle: product.description,
+                                    price: product.price.toStringAsFixed(2),
+                                    imagePath: product.image,
+                                  ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFF1F1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                product.image,
+                                height: 100,
+                                fit: BoxFit.contain,
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                product.name,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                product.description,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                'Rs. \\${product.price.toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

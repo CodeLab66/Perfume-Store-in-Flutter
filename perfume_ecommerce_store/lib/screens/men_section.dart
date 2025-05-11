@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/product_model.dart';
+import '../firebase/index_firebase.dart' as firebase_index;
 import 'product_screen.dart';
 
 class MenCollectionScreen extends StatefulWidget {
@@ -11,28 +10,8 @@ class MenCollectionScreen extends StatefulWidget {
 }
 
 class _MenCollectionScreenState extends State<MenCollectionScreen> {
-  List<Product> perfumes = [];
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPerfumes();
-  }
-
-  Future<void> fetchPerfumes() async {
-    try {
-      final querySnapshot =
-          await FirebaseFirestore.instance.collection('men_section').get();
-      setState(() {
-        perfumes =
-            querySnapshot.docs
-                .map((doc) => Product.fromFirestore(doc.data()))
-                .toList();
-      });
-    } catch (e) {
-      print('Error fetching perfumes: $e');
-    }
-  }
+  final firebase_index.FirestoreService firestoreService =
+      firebase_index.FirestoreService();
 
   @override
   Widget build(BuildContext context) {
@@ -45,88 +24,119 @@ class _MenCollectionScreenState extends State<MenCollectionScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search, color: Colors.black),
-            onPressed: () {
-              // Future: Navigate to search page
-            },
+            onPressed: () {},
           ),
         ],
       ),
-      body:
-          perfumes.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: GridView.builder(
-                  itemCount: perfumes.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 20,
-                    childAspectRatio: 0.7,
-                  ),
-                  itemBuilder: (context, index) {
-                    final product = perfumes[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (_) => ProductPageScreen(
-                                  title: product.title,
-                                  subtitle: product.subtitle,
-                                  price: product.price.toStringAsFixed(2),
-                                  imagePath: product.imagePath,
-                                ),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFF1F1),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.network(
-                              product.imagePath,
-                              height: 100,
-                              fit: BoxFit.contain,
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              product.title,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              product.subtitle,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              '${product.price.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Men Collection',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'AnticSlab',
               ),
+            ),
+            const Text(
+              'Wear Your unseen Aura',
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: StreamBuilder<List<firebase_index.Product>>(
+                stream: firestoreService.fetchProductsByCategory('Men'),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+                  final products = snapshot.data ?? [];
+                  if (products.isEmpty) {
+                    return const Center(child: Text('No products available'));
+                  }
+                  return GridView.builder(
+                    itemCount: products.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 20,
+                          childAspectRatio: 0.7,
+                        ),
+                    itemBuilder: (context, index) {
+                      final product = products[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (_) => ProductPageScreen(
+                                    title: product.name,
+                                    subtitle: product.description,
+                                    price: product.price.toStringAsFixed(2),
+                                    imagePath: product.image,
+                                  ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFFF1F1),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.network(
+                                product.image,
+                                height: 100,
+                                fit: BoxFit.contain,
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                product.name,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                product.description,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                'Rs. ${product.price.toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

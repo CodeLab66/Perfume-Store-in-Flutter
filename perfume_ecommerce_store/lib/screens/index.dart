@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import '../firebase/index_firebase.dart'; // FirestoreService
-import '../firebase/product_firebase.dart'; // Product model
+import '../firebase/product_firebase.dart'; // Product
 import 'women_section.dart';
 import 'men_section.dart';
 import 'bestsellers_section.dart';
@@ -47,7 +47,6 @@ class HomeScreen extends StatelessWidget {
               if (products.isEmpty) {
                 return const Center(child: Text('No products available'));
               }
-              // limit to max 3 products
               final displayed = products.take(3).toList();
 
               return SingleChildScrollView(
@@ -62,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 15),
                             child: ProductCard(
                               title: p.name,
-                              subtitle: '50 ml',
+                              subtitle: p.size, // or p.description
                               price: 'Rs. ${p.price}',
                               imagePath: p.image,
                             ),
@@ -169,7 +168,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-/// Reusable section header widget
+/// Section header widget
 class SectionHeader extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -223,7 +222,7 @@ class SectionHeader extends StatelessWidget {
   }
 }
 
-/// Card widget for a product
+/// Product card that now sizes to its content
 class ProductCard extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -250,18 +249,23 @@ class ProductCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Expanded(child: Image.network(imagePath, fit: BoxFit.contain)),
+          // fixed‐height image
+          SizedBox(
+            height: 100,
+            child: Image.network(imagePath, fit: BoxFit.contain),
+          ),
           const SizedBox(height: 10),
           Text(
             title,
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           Text(
             subtitle,
             style: const TextStyle(fontSize: 14, color: Colors.grey),
           ),
+          const SizedBox(height: 10),
           const Spacer(),
           Text(
             price,
@@ -271,6 +275,7 @@ class ProductCard extends StatelessWidget {
               color: Colors.black,
             ),
           ),
+          const SizedBox(height: 10),
         ],
       ),
     );

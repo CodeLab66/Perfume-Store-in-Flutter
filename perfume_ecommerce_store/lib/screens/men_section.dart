@@ -110,7 +110,7 @@ class _MenCollectionScreenState extends State<MenCollectionScreen> {
                                 textAlign: TextAlign.center,
                               ),
                               Text(
-                                product.description,
+                                product.size,
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey,

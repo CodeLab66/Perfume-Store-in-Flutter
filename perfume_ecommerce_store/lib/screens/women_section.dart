@@ -79,7 +79,7 @@ class _WomenCollectionScreenState extends State<WomenCollectionScreen> {
                               builder:
                                   (_) => ProductPageScreen(
                                     title: product.name,
-                                    subtitle: product.description,
+                                    subtitle: product.size,
                                     price: product.price.toStringAsFixed(2),
                                     imagePath: product.image,
                                   ),
@@ -110,7 +110,7 @@ class _WomenCollectionScreenState extends State<WomenCollectionScreen> {
                                 textAlign: TextAlign.center,
                               ),
                               Text(
-                                product.description,
+                                product.size,
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey,

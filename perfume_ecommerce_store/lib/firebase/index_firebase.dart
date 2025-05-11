@@ -25,12 +25,14 @@ class Product {
   final String description;
   final String image;
   final double price;
+  final String size;
 
   Product({
     required this.name,
     required this.description,
     required this.image,
     required this.price,
+    required this.size,
   });
 
   factory Product.fromFirestore(Map<String, dynamic> data) {
@@ -40,6 +42,7 @@ class Product {
       description: data['description'] as String? ?? '',
       image: _formatGoogleDriveImageURL(rawImage),
       price: (data['price'] as num?)?.toDouble() ?? 0.0,
+      size: data['size'] as String? ?? '',
     );
   }
 

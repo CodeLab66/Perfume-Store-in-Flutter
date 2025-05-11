@@ -2,33 +2,20 @@ import 'package:flutter/material.dart';
 import 'index.dart';
 import 'cart_screen.dart';
 import 'profile_screen.dart';
+import 'product_screen.dart';
+import '../firebase/product_firebase.dart' as product_firebase;
 
-class FavoriteScreen extends StatelessWidget {
+class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final products = [
-      {
-        'title': 'Dior Sauvage',
-        'subtitle': '50 ml',
-        'price': 'Rs. 52,320',
-        'imagePath': 'assets/images/dior_sauvage.jpeg',
-      },
-      {
-        'title': 'Chanel Chance',
-        'subtitle': '50 ml',
-        'price': 'Rs. 65,000',
-        'imagePath': 'assets/images/chanel_chance.jpeg',
-      },
-      {
-        'title': 'YSL Myself',
-        'subtitle': '100 ml',
-        'price': 'Rs. 50,000',
-        'imagePath': 'assets/images/ysl_myself.jpeg',
-      },
-    ];
+  State<FavoriteScreen> createState() => _FavoriteScreenState();
+}
 
+class _FavoriteScreenState extends State<FavoriteScreen> {
+  @override
+  Widget build(BuildContext context) {
+    final favoriteNames = favorites;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -60,24 +47,44 @@ class FavoriteScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: GridView.builder(
-                itemCount: products.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 20,
-                  childAspectRatio: 0.65,
-                ),
-                itemBuilder: (context, index) {
-                  final product = products[index];
-                  return FavoriteProductCard(
-                    title: product['title']!,
-                    subtitle: product['subtitle']!,
-                    price: product['price']!,
-                    imagePath: product['imagePath']!,
-                  );
-                },
-              ),
+              child:
+                  favoriteNames.isEmpty
+                      ? const Center(child: Text('No favorites yet'))
+                      : GridView.builder(
+                        itemCount: favoriteNames.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 15,
+                              mainAxisSpacing: 20,
+                              childAspectRatio: 0.65,
+                            ),
+                        itemBuilder: (context, index) {
+                          final name = favoriteNames[index];
+                          return StreamBuilder<product_firebase.Product>(
+                            stream: product_firebase.fetchProductByName(name),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              if (!snapshot.hasData) {
+                                return const SizedBox();
+                              }
+                              final product = snapshot.data!;
+                              return FavoriteProductCard(
+                                title: product.name,
+                                subtitle: product.size,
+                                price:
+                                    'Rs. ${product.price.toStringAsFixed(2)}',
+                                imagePath: product.image,
+                              );
+                            },
+                          );
+                        },
+                      ),
             ),
           ],
         ),
@@ -100,12 +107,13 @@ class FavoriteScreen extends StatelessWidget {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      index == 0
-                          ? const HomeScreen()
-                          : index == 2
-                          ? const CartScreen()
-                          : const ProfileViewPage(),
+                  builder:
+                      (context) =>
+                          index == 0
+                              ? const HomeScreen()
+                              : index == 2
+                              ? const CartScreen()
+                              : const ProfileViewPage(),
                 ),
               );
             }
@@ -165,6 +173,7 @@ class _FavoriteProductCardState extends State<FavoriteProductCard> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -186,29 +195,25 @@ class _FavoriteProductCardState extends State<FavoriteProductCard> {
             ],
           ),
           const SizedBox(height: 2),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset(
-              widget.imagePath,
-              height: 110,
-              fit: BoxFit.contain,
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(widget.imagePath, fit: BoxFit.contain),
             ),
           ),
-          const SizedBox(height: 5),
-
+          const SizedBox(height: 8),
           Text(
             widget.title,
-            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           Text(
             widget.subtitle,
-            style: const TextStyle(fontSize: 15, color: Colors.grey),
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
           ),
-          const SizedBox(height: 5),
-
+          const SizedBox(height: 8),
           Text(
             widget.price,
             style: const TextStyle(

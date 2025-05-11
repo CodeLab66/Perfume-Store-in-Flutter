@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Product {
   final String name;
   final String description;
@@ -28,4 +30,20 @@ class Product {
     if (urlOrId.startsWith('http')) return urlOrId;
     return 'https://drive.google.com/uc?id=$urlOrId';
   }
+}
+
+final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+Stream<Product> fetchProductByName(String name) {
+  return _db
+      .collection('products')
+      .where('name', isEqualTo: name)
+      .limit(1)
+      .snapshots()
+      .map(
+        (snap) =>
+            snap.docs.isNotEmpty
+                ? Product.fromFirestore(snap.docs.first.data())
+                : throw Exception('Product not found'),
+      );
 }

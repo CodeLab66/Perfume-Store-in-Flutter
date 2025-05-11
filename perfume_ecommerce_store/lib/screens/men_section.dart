@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../firebase/index_firebase.dart' as firebase_index;
+import '../firebase/men_section_firebase.dart' as men_firebase;
+import '../firebase/product_firebase.dart';
 import 'product_screen.dart';
 
 class MenCollectionScreen extends StatefulWidget {
@@ -10,9 +11,6 @@ class MenCollectionScreen extends StatefulWidget {
 }
 
 class _MenCollectionScreenState extends State<MenCollectionScreen> {
-  final firebase_index.FirestoreService firestoreService =
-      firebase_index.FirestoreService();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,8 +45,8 @@ class _MenCollectionScreenState extends State<MenCollectionScreen> {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: StreamBuilder<List<firebase_index.Product>>(
-                stream: firestoreService.fetchProductsByCategory('Men'),
+              child: StreamBuilder<List<Product>>(
+                stream: men_firebase.fetchMenProducts(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -79,7 +77,7 @@ class _MenCollectionScreenState extends State<MenCollectionScreen> {
                               builder:
                                   (_) => ProductPageScreen(
                                     title: product.name,
-                                    subtitle: product.description,
+                                    subtitle: product.size,
                                     price: product.price.toStringAsFixed(2),
                                     imagePath: product.image,
                                   ),

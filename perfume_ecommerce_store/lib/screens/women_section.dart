@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../firebase/index_firebase.dart' as firebase_index;
+import '../firebase/women_section_firebase.dart' as women_firebase;
+import '../firebase/product_firebase.dart';
 import 'product_screen.dart';
 
 class WomenCollectionScreen extends StatefulWidget {
@@ -10,9 +11,6 @@ class WomenCollectionScreen extends StatefulWidget {
 }
 
 class _WomenCollectionScreenState extends State<WomenCollectionScreen> {
-  final firebase_index.FirestoreService firestoreService =
-      firebase_index.FirestoreService();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,8 +45,8 @@ class _WomenCollectionScreenState extends State<WomenCollectionScreen> {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: StreamBuilder<List<firebase_index.Product>>(
-                stream: firestoreService.fetchProductsByCategory('Women'),
+              child: StreamBuilder<List<Product>>(
+                stream: women_firebase.fetchWomenProducts(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());

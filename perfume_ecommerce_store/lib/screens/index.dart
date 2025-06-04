@@ -1,8 +1,6 @@
-// lib/screens/index.dart
-
 import 'package:flutter/material.dart';
-import '../firebase/index_firebase.dart'; // FirestoreService
-import '../firebase/product_firebase.dart'; // Product
+import '../firebase/index_firebase.dart';
+import '../firebase/product_firebase.dart';
 import 'women_section.dart';
 import 'men_section.dart';
 import 'bestsellers_section.dart';
@@ -18,7 +16,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final firestoreService = FirestoreService();
-
     Widget buildSection(
       String title,
       String subtitle,

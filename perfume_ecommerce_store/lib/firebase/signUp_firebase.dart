@@ -22,9 +22,16 @@ class SignUpService {
       await userCredential.user!.updateDisplayName(name.trim());
 
       // Store user data in Firestore
-      await _firestore.collection('users').doc(userCredential.user!.uid).set({
+      final userDoc = _firestore
+          .collection('users')
+          .doc(userCredential.user!.uid);
+      await userDoc.set({
         'fullName': name.trim(),
         'email': email.trim(),
+        'address': null,
+        'phoneNumber': null,
+        'paymentMethod': null,
+        'paymentNumber': null,
         'createdAt': FieldValue.serverTimestamp(),
       });
 

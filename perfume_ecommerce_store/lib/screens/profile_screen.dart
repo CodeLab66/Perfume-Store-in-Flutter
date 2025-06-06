@@ -132,7 +132,7 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
                         "Mobile number",
                         _userData?["phoneNumber"] ?? "Add number",
                       ),
-                      InfoRow("Location", _userData?["address"] ?? ""),
+                      InfoRow("Address", _userData?["address"] ?? ""),
                     ],
                   ),
                   const SizedBox(height: 20),

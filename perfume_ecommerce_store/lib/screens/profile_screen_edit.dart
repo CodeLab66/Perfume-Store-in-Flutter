@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import '../firebase/profile_firebase.dart';
 
 class ProfileEditPage extends StatefulWidget {
-  const ProfileEditPage({super.key});
+  final Map<String, dynamic> userData;
+  const ProfileEditPage({super.key, required this.userData});
 
   @override
   State<ProfileEditPage> createState() => _ProfileEditPageState();
@@ -9,19 +11,45 @@ class ProfileEditPage extends StatefulWidget {
 
 class _ProfileEditPageState extends State<ProfileEditPage> {
   final _formKey = GlobalKey<FormState>();
-
-  // Personal Info Controllers
-  final nameController = TextEditingController(text: "Arooj Qudsia");
-  final emailController = TextEditingController(text: "qudsia@gmail.com");
-  final phoneController = TextEditingController(text: "+1 234 567 890");
-  final locationController = TextEditingController(
-    text: "Street 123, City, Country",
-  );
-
-  // Payment Info
+  late TextEditingController nameController;
+  late TextEditingController emailController;
+  late TextEditingController phoneController;
+  late TextEditingController locationController;
+  late TextEditingController accountNumberController;
   String selectedPaymentMethod = "Jazzcash";
-  final accountNumberController = TextEditingController(text: "03244551504");
   final List<String> paymentMethods = ["Jazzcash", "Easypaisa"];
+  final ProfileService _profileService = ProfileService();
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(
+      text: widget.userData['fullName'] ?? "",
+    );
+    emailController = TextEditingController(
+      text: widget.userData['email'] ?? "",
+    );
+    phoneController = TextEditingController(
+      text: widget.userData['phoneNumber'] ?? "",
+    );
+    locationController = TextEditingController(
+      text: widget.userData['address'] ?? "",
+    );
+    selectedPaymentMethod = widget.userData['paymentMethod'] ?? "Jazzcash";
+    accountNumberController = TextEditingController(
+      text: widget.userData['paymentNumber'] ?? "",
+    );
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    locationController.dispose();
+    accountNumberController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +118,17 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               const SizedBox(height: 30),
 
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    Navigator.pop(context); // Go back to previous screen
+                    await _profileService.updateUserData({
+                      'fullName': nameController.text.trim(),
+                      'email': emailController.text.trim(),
+                      'phoneNumber': phoneController.text.trim(),
+                      'address': locationController.text.trim(),
+                      'paymentMethod': selectedPaymentMethod,
+                      'paymentNumber': accountNumberController.text.trim(),
+                    });
+                    if (mounted) Navigator.pop(context, true);
                   }
                 },
                 style: ElevatedButton.styleFrom(

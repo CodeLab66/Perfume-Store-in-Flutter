@@ -4,14 +4,41 @@ import 'index.dart';
 import 'favorite_screen.dart';
 import 'cart_screen.dart';
 import 'login_screen.dart';
+import '../firebase/profile_firebase.dart';
 
 const Color pinkColor = Color(0xFFE4B1AB);
 
-class ProfileViewPage extends StatelessWidget {
+class ProfileViewPage extends StatefulWidget {
   const ProfileViewPage({super.key});
 
   @override
+  State<ProfileViewPage> createState() => _ProfileViewPageState();
+}
+
+class _ProfileViewPageState extends State<ProfileViewPage> {
+  final ProfileService _profileService = ProfileService();
+  Map<String, dynamic>? _userData;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    final userData = await _profileService.fetchUserData();
+    setState(() {
+      _userData = userData;
+      _loading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Scaffold(
       backgroundColor: const Color(0xFFF9F9F9),
       bottomNavigationBar: Container(
@@ -98,11 +125,14 @@ class ProfileViewPage extends StatelessWidget {
                 children: [
                   _infoCard(
                     title: "Personal Information",
-                    children: const [
-                      InfoRow("Name", "your name"),
-                      InfoRow("Email account", "youremail@gmail.com"),
-                      InfoRow("Mobile number", "Add number"),
-                      InfoRow("Location", "USA"),
+                    children: [
+                      InfoRow("Name", _userData?["fullName"] ?? ""),
+                      InfoRow("Email account", _userData?["email"] ?? ""),
+                      InfoRow(
+                        "Mobile number",
+                        _userData?["phoneNumber"] ?? "Add number",
+                      ),
+                      InfoRow("Location", _userData?["address"] ?? ""),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -194,19 +224,23 @@ class ProfileViewPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          const InfoRow("Payment Method", "Jazzcash"),
-          const InfoRow("Account Number", "03244551504"),
+          InfoRow("Payment Method", _userData?["paymentMethod"] ?? ""),
+          InfoRow("Account Number", _userData?["paymentNumber"] ?? ""),
           const SizedBox(height: 10),
           Align(
             alignment: Alignment.centerRight,
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                final updated = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ProfileEditPage(),
+                    builder:
+                        (context) => ProfileEditPage(userData: _userData ?? {}),
                   ),
                 );
+                if (updated == true) {
+                  _loadData();
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: pinkColor,

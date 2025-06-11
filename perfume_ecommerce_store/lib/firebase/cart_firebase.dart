@@ -5,78 +5,87 @@ class CartFirebase {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> initializeCart() async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      final cartDoc = _firestore.collection('cart').doc(user.uid);
-      final cartSnapshot = await cartDoc.get();
+  String? get userId => _auth.currentUser?.uid;
 
-      if (!cartSnapshot.exists) {
-        await cartDoc.set({'items': []});
-      }
-    }
-  }
+  // Add or update item in cart (by productName and size)
+  Future<void> addOrUpdateCartItem(Map<String, dynamic> product) async {
+    if (userId == null) return;
+    final userRef = _firestore.collection('users').doc(userId);
 
-  Future<void> addItemToCart(Map<String, dynamic> item) async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      final cartDoc = _firestore.collection('cart').doc(user.uid);
-      final cartSnapshot = await cartDoc.get();
+    await _firestore.runTransaction((transaction) async {
+      final snapshot = await transaction.get(userRef);
+      List<dynamic> cart = snapshot.data()?['cart'] ?? [];
 
-      if (cartSnapshot.exists) {
-        final items = List<Map<String, dynamic>>.from(
-          cartSnapshot.data()!['items'],
-        );
-        final existingItemIndex = items.indexWhere(
-          (i) => i['productId'] == item['productId'],
-        );
+      int index = cart.indexWhere(
+        (item) =>
+            item['productName'] == product['productName'] &&
+            item['size'] == product['size'],
+      );
 
-        if (existingItemIndex != -1) {
-          // Update existing item
-          items[existingItemIndex] = item;
-        } else {
-          // Add new item
-          items.add(item);
-        }
-
-        await cartDoc.update({'items': items});
+      if (index != -1) {
+        cart[index]['quantity'] += product['quantity'];
       } else {
-        // Create new cart with item
-        await cartDoc.set({
-          'items': [item],
-        });
+        cart.add(product);
       }
-    }
+
+      transaction.update(userRef, {'cart': cart});
+    });
   }
 
-  Future<void> removeItemFromCart(Map<String, dynamic> item) async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      final cartDoc = _firestore.collection('cart').doc(user.uid);
-      final cartSnapshot = await cartDoc.get();
+  // Remove item from cart (by productName and size)
+  Future<void> removeCartItem(String productName, String size) async {
+    if (userId == null) return;
+    final userRef = _firestore.collection('users').doc(userId);
 
-      if (cartSnapshot.exists) {
-        final items = List<Map<String, dynamic>>.from(
-          cartSnapshot.data()!['items'],
-        );
-        items.removeWhere((i) => i['productId'] == item['productId']);
-        await cartDoc.update({'items': items});
-      }
-    }
+    await _firestore.runTransaction((transaction) async {
+      final snapshot = await transaction.get(userRef);
+      List<dynamic> cart = snapshot.data()?['cart'] ?? [];
+      cart.removeWhere(
+        (item) => item['productName'] == productName && item['size'] == size,
+      );
+      transaction.update(userRef, {'cart': cart});
+    });
   }
 
-  Stream<List<Map<String, dynamic>>> getCartItems() {
-    final user = _auth.currentUser;
-    if (user != null) {
-      return _firestore.collection('cart').doc(user.uid).snapshots().map((
-        snapshot,
-      ) {
-        if (snapshot.exists && snapshot.data()?['items'] != null) {
-          return List<Map<String, dynamic>>.from(snapshot.data()!['items']);
-        }
+  // Update quantity for a cart item
+  Future<void> updateCartItemQuantity(
+    String productName,
+    String size,
+    int quantity,
+  ) async {
+    if (userId == null) return;
+    final userRef = _firestore.collection('users').doc(userId);
+
+    await _firestore.runTransaction((transaction) async {
+      final snapshot = await transaction.get(userRef);
+      List<dynamic> cart = snapshot.data()?['cart'] ?? [];
+      int index = cart.indexWhere(
+        (item) => item['productName'] == productName && item['size'] == size,
+      );
+      if (index != -1) {
+        cart[index]['quantity'] = quantity;
+        transaction.update(userRef, {'cart': cart});
+      }
+    });
+  }
+
+  // Clear the cart
+  Future<void> clearCart() async {
+    if (userId == null) return;
+    final userRef = _firestore.collection('users').doc(userId);
+    await userRef.update({'cart': []});
+  }
+
+  // Fetch cart as a stream
+  Stream<List<Map<String, dynamic>>> fetchCartItems() {
+    if (userId == null) return const Stream.empty();
+    final userRef = _firestore.collection('users').doc(userId);
+    return userRef.snapshots().map((snapshot) {
+      if (snapshot.exists && snapshot.data()?['cart'] != null) {
+        return List<Map<String, dynamic>>.from(snapshot.data()!['cart']);
+      } else {
         return [];
-      });
-    }
-    return Stream.value([]);
+      }
+    });
   }
 }

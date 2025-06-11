@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../firebase/product_firebase.dart' as product_firebase;
+import '../firebase/cart_firebase.dart';
 
 List<String> favorites = [];
 String? currentUserId;
@@ -44,13 +45,18 @@ class _ProductPageScreenState extends State<ProductPageScreen> {
     }
   }
 
-  void addToCart(String productName) {
-    setState(() {
-      cart.add(productName);
-    });
+  void addToCart(product_firebase.Product product) async {
+    final cartItem = {
+      'productName': product.name,
+      'price': product.price,
+      'quantity': 1,
+      'size': product.size,
+      'image': product.image, // Add image if you want to show it in cart
+    };
+    await CartFirebase().addOrUpdateCartItem(cartItem);
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(SnackBar(content: Text('Added to cart!')));
+    ).showSnackBar(const SnackBar(content: Text('Added to cart!')));
   }
 
   @override
@@ -71,9 +77,7 @@ class _ProductPageScreenState extends State<ProductPageScreen> {
           stream: product_firebase.userFavoritesStream(),
           builder: (context, favSnapshot) {
             final favs = favSnapshot.data ?? [];
-            isFavorited = favs.contains(
-              product.name,
-            ); // Use product.id if you have it
+            isFavorited = favs.contains(product.name);
             return Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(
@@ -126,10 +130,7 @@ class _ProductPageScreenState extends State<ProductPageScreen> {
                                       : Icons.favorite_border,
                                   color: isFavorited ? Colors.red : Colors.grey,
                                 ),
-                                onPressed:
-                                    () => toggleFavorite(
-                                      product.name,
-                                    ), // Use product.id if you have it
+                                onPressed: () => toggleFavorite(product.name),
                               ),
                             ],
                           ),
@@ -159,7 +160,7 @@ class _ProductPageScreenState extends State<ProductPageScreen> {
                           const SizedBox(height: 20),
                           Center(
                             child: ElevatedButton(
-                              onPressed: () => addToCart(product.name),
+                              onPressed: () => addToCart(product),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFFE8A0A0),
                               ),

@@ -56,16 +56,29 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
           showUnselectedLabels: false,
           onTap: (index) {
             if (index != 3) {
+              Widget nextScreen =
+                  index == 0
+                      ? const HomeScreen()
+                      : index == 1
+                      ? const FavoriteScreen()
+                      : const CartScreen();
+
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder:
-                      (context) =>
-                          index == 0
-                              ? const HomeScreen()
-                              : index == 1
-                              ? const FavoriteScreen()
-                              : const CartScreen(),
+                PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 400),
+                  pageBuilder: (_, __, ___) => nextScreen,
+                  transitionsBuilder: (_, animation, __, child) {
+                    const begin = Offset(1.0, 0.0); // Slide from right
+                    const end = Offset.zero;
+                    final tween = Tween(begin: begin, end: end);
+                    final offsetAnimation = animation.drive(tween);
+
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
                 ),
               );
             }
@@ -233,9 +246,14 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
               onPressed: () async {
                 final updated = await Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) => ProfileEditPage(userData: _userData ?? {}),
+                  PageRouteBuilder(
+                    transitionDuration: const Duration(milliseconds: 500),
+                    pageBuilder:
+                        (_, __, ___) =>
+                            ProfileEditPage(userData: _userData ?? {}),
+                    transitionsBuilder: (_, animation, __, child) {
+                      return FadeTransition(opacity: animation, child: child);
+                    },
                   ),
                 );
                 if (updated == true) {

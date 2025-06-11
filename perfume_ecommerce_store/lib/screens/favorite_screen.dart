@@ -126,16 +126,29 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               showUnselectedLabels: false,
               onTap: (index) {
                 if (index != 1) {
+                  Widget nextScreen =
+                      index == 0
+                          ? const HomeScreen()
+                          : index == 2
+                          ? const CartScreen()
+                          : const ProfileViewPage();
+
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) =>
-                              index == 0
-                                  ? const HomeScreen()
-                                  : index == 2
-                                  ? const CartScreen()
-                                  : const ProfileViewPage(),
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 400),
+                      pageBuilder: (_, __, ___) => nextScreen,
+                      transitionsBuilder: (_, animation, __, child) {
+                        const begin = Offset(1.0, 0.0); // Slide from right
+                        const end = Offset.zero;
+                        final tween = Tween(begin: begin, end: end);
+                        final offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
                     ),
                   );
                 }

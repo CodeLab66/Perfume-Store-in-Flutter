@@ -127,16 +127,29 @@ class HomeScreen extends StatelessWidget {
           showUnselectedLabels: false,
           onTap: (i) {
             if (i != 0) {
+              Widget nextScreen =
+                  i == 1
+                      ? const FavoriteScreen()
+                      : i == 2
+                      ? const CartScreen()
+                      : const ProfileViewPage();
+
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder:
-                      (_) =>
-                          i == 1
-                              ? const FavoriteScreen()
-                              : i == 2
-                              ? const CartScreen()
-                              : const ProfileViewPage(),
+                PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 400),
+                  pageBuilder: (_, __, ___) => nextScreen,
+                  transitionsBuilder: (_, animation, __, child) {
+                    const begin = Offset(1.0, 0.0); // Slide in from right
+                    const end = Offset.zero;
+                    final tween = Tween(begin: begin, end: end);
+                    final offsetAnimation = animation.drive(tween);
+
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
                 ),
               );
             }

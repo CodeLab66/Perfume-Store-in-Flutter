@@ -268,7 +268,7 @@ class _CartScreenState extends State<CartScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const CheckoutScreen(),
+                          builder: (context) => CheckoutScreen(),
                         ),
                       );
                     },
@@ -298,16 +298,29 @@ class _CartScreenState extends State<CartScreen> {
           showUnselectedLabels: false,
           onTap: (index) {
             if (index != 2) {
+              Widget nextScreen =
+                  index == 0
+                      ? const HomeScreen()
+                      : index == 1
+                      ? const FavoriteScreen()
+                      : const ProfileViewPage();
+
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                  builder:
-                      (context) =>
-                          index == 0
-                              ? const HomeScreen()
-                              : index == 1
-                              ? const FavoriteScreen()
-                              : const ProfileViewPage(),
+                PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 400),
+                  pageBuilder: (_, __, ___) => nextScreen,
+                  transitionsBuilder: (_, animation, __, child) {
+                    const begin = Offset(1.0, 0.0);
+                    const end = Offset.zero;
+                    final tween = Tween(begin: begin, end: end);
+                    final offsetAnimation = animation.drive(tween);
+
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
                 ),
               );
             }

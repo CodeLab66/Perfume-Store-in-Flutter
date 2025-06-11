@@ -3,13 +3,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase/cart_firebase.dart';
 import 'cart_screen.dart';
+import 'orderPlaced_screen.dart';
+import 'paymentProcessing_screen.dart';
 
-class CheckoutScreen extends StatelessWidget {
+class CheckoutScreen extends StatefulWidget {
   final CartFirebase cartFirebase = CartFirebase();
 
   CheckoutScreen({super.key});
 
   static const Color pinkColor = Color(0xFFE8A0A0);
+
+  @override
+  State<CheckoutScreen> createState() => _CheckoutScreenState();
+}
+
+class _CheckoutScreenState extends State<CheckoutScreen> {
+  String selectedPaymentMethod = 'cash';
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getUserDoc() async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
@@ -70,7 +79,7 @@ class CheckoutScreen extends StatelessWidget {
           final cardNumber = user['paymentNumber'];
 
           return StreamBuilder<List<Map<String, dynamic>>>(
-            stream: cartFirebase.fetchCartItems(),
+            stream: widget.cartFirebase.fetchCartItems(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -151,7 +160,15 @@ class CheckoutScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    _PaymentMethodSelector(cardNumber: cardNumber),
+                    _PaymentMethodSelector(
+                      cardNumber: cardNumber,
+                      selected: selectedPaymentMethod,
+                      onChanged: (method) {
+                        setState(() {
+                          selectedPaymentMethod = method;
+                        });
+                      },
+                    ),
                     const SizedBox(height: 18),
                     // Order Summary
                     const Text(
@@ -232,7 +249,7 @@ class CheckoutScreen extends StatelessWidget {
                             Expanded(
                               flex: 3,
                               child: Text(
-                                '\Rs. ${subtotal.toStringAsFixed(2)}',
+                                'Rs. ${subtotal.toStringAsFixed(2)}',
                                 textAlign: TextAlign.right,
                                 style: const TextStyle(fontSize: 15),
                               ),
@@ -293,14 +310,32 @@ class CheckoutScreen extends StatelessWidget {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: pinkColor,
+                          backgroundColor: CheckoutScreen.pinkColor,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
                         ),
                         onPressed: () {
-                          // Place order logic here
+                          if (selectedPaymentMethod == 'cash') {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const OrderPlacedScreen(),
+                              ),
+                            );
+                            // Place order logic here
+                          } else {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) =>
+                                        const ProcessingPaymentScreen(),
+                              ),
+                            );
+                            // Start payment deduction logic here
+                          }
                         },
                         child: const Text(
                           'Proceed',
@@ -320,10 +355,16 @@ class CheckoutScreen extends StatelessWidget {
   }
 }
 
-// Add this widget below your CheckoutScreen class
 class _PaymentMethodSelector extends StatefulWidget {
   final String? cardNumber;
-  const _PaymentMethodSelector({required this.cardNumber});
+  final String selected;
+  final ValueChanged<String> onChanged;
+
+  const _PaymentMethodSelector({
+    required this.cardNumber,
+    required this.selected,
+    required this.onChanged,
+  });
 
   @override
   State<_PaymentMethodSelector> createState() => _PaymentMethodSelectorState();
@@ -336,8 +377,15 @@ class _PaymentMethodSelectorState extends State<_PaymentMethodSelector> {
   @override
   void initState() {
     super.initState();
-    isCard = widget.cardNumber != null;
-    isCash = !isCard;
+    isCard = widget.selected == 'card';
+    isCash = widget.selected == 'cash';
+  }
+
+  @override
+  void didUpdateWidget(covariant _PaymentMethodSelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    isCard = widget.selected == 'card';
+    isCash = widget.selected == 'cash';
   }
 
   @override
@@ -353,6 +401,7 @@ class _PaymentMethodSelectorState extends State<_PaymentMethodSelector> {
                   isCard = true;
                   isCash = false;
                 });
+                widget.onChanged('card');
               },
             ),
             Text(
@@ -384,6 +433,7 @@ class _PaymentMethodSelectorState extends State<_PaymentMethodSelector> {
                   isCard = false;
                   isCash = true;
                 });
+                widget.onChanged('cash');
               },
             ),
             const Text(

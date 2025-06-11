@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:perfume_ecommerce_store/screens/index.dart';
 import 'screens/splash_screen.dart';
 
 void main() async {
@@ -14,6 +15,7 @@ class Roselle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {'/index': (context) => const HomeScreen()},
       title: 'ROSELLE App',
       theme: ThemeData(
         primarySwatch: Colors.pink,

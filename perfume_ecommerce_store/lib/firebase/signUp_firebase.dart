@@ -32,6 +32,7 @@ class SignUpService {
         'phoneNumber': null,
         'paymentMethod': null,
         'paymentNumber': null,
+        'fav': <String>[],
         'createdAt': FieldValue.serverTimestamp(),
       });
 

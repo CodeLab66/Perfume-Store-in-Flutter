@@ -15,16 +15,22 @@ class _MenCollectionScreenState extends State<MenCollectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
+        toolbarHeight: 80,
+        backgroundColor: Colors.white70,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         centerTitle: true,
-        title: Image.asset('assets/images/roselle.png', height: 50),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.black),
-            onPressed: () {},
+        title: Padding(
+          padding: const EdgeInsets.only(right: 12.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset('assets/images/roselle.png', height: 55),
           ),
-        ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -111,7 +117,7 @@ class _MenCollectionScreenState extends State<MenCollectionScreen> {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                'Rs. ${product.price.toStringAsFixed(2)}',
+                                'Rs. ${product.price.toStringAsFixed(0)}',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

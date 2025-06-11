@@ -97,7 +97,7 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
               color: Color(0xFFE4B1AB),
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
             ),
-            padding: const EdgeInsets.fromLTRB(20, 50, 20, 30),
+            padding: const EdgeInsets.fromLTRB(160, 50, 160, 50),
             child: Column(
               children: const [
                 SizedBox(height: 20),
@@ -105,7 +105,7 @@ class _ProfileViewPageState extends State<ProfileViewPage> {
                   "Profile",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

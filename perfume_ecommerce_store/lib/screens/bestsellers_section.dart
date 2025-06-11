@@ -20,7 +20,8 @@ class BestSellersScreen extends StatelessWidget {
           },
         ),
         centerTitle: true,
-        title: Center(
+        title: Padding(
+          padding: const EdgeInsets.only(right: 12.0),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Image.asset('assets/images/roselle.png', height: 55),
@@ -117,7 +118,7 @@ class BestSellersScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                'Rs. ${product.price.toStringAsFixed(2)}',
+                                'Rs. ${product.price.toStringAsFixed(0)}',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

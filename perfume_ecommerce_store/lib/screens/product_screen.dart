@@ -151,7 +151,7 @@ class _ProductPageScreenState extends State<ProductPageScreen> {
                           ),
                           const SizedBox(height: 20),
                           Text(
-                            'Rs. ${product.price.toStringAsFixed(2)}',
+                            'Rs. ${product.price.toStringAsFixed(0)}',
                             style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
